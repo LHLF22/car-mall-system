@@ -1,0 +1,15 @@
+// 在需要持久化的仓库启用
+import { defineStore } from 'pinia';
+import {ref} from 'vue'
+export const useCounterStore = defineStore(
+  'counter',
+  () => {
+    const count = ref(0);
+    const increment = () => count.value++;
+    return {
+      count,
+      increment,
+    };
+  },
+  { persist: true } // 启用持久化
+);

@@ -1,5 +1,11 @@
 {
   "compilerOptions": {
+    "baseUrl": "./", // 未设置 "baseUrl" 时，不允许使用非相对路径。
+    "paths": {
+      //"@":["src"],
+      "@/*": ["src/*"]
+    }, 
+    "allowJs": true, //xxx.vue is a JavaScript file. Did you mean to enable the 'allowJs' option?
     "target": "ES2020",
     "useDefineForClassFields": true,
     "module": "ESNext",
@@ -7,8 +13,9 @@
     "skipLibCheck": true,
 
     /* Bundler mode */
-    "moduleResolution": "bundler",
+    "moduleResolution": "Node",
     "allowImportingTsExtensions": true,
+    "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
@@ -18,8 +25,11 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+
+    "types": ["element-plus/global"]
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue"],
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
+  "exclude": ["node_modules"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
