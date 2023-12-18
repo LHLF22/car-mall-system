@@ -1,6 +1,6 @@
 /*
  * @Date: 2023-12-05 14:35:51
- * @LastEditTime: 2023-12-08 16:48:27
+ * @LastEditTime: 2023-12-13 09:55:45
  * @FilePath: \car-mall-system\src\main.ts
  * @Description:
  * 1.数据持久化
@@ -37,12 +37,14 @@ for (const [key, component] of Object.entries(ElementPlusIcons)) {
 }
 
 // 引入HTTP请求工具并配置为全局方法
-/* import {user} from '@/api'//直接在api中有
+/* import {buyer} from '@/api'//直接在api中有
 app.config.globalProperties.$http = {
-  user,
+  buyer,
 } */
-import userApi from "./api/user";
-app.config.globalProperties.$userApi = userApi;
+import buyerApi from "./api/buyer";
+import loginRegisterApi from "./api/login-register";
+app.config.globalProperties.$buyerApi = buyerApi;
+app.config.globalProperties.$loginRegisterApi = loginRegisterApi;
 app.use(ElementPlus).use(store).use(router).mount("#app");
 
 // size 用于设置表单组件的默认尺寸，zIndex 用于设置弹出组件的层级，zIndex 的默认值为 2000。

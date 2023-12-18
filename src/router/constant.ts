@@ -7,14 +7,10 @@
 // export const Home = () => import('@/layout/index.vue')
 const Login = () => import("@/views/Login.vue");
 const NotFound = () => import("@/views/404.vue");
-const user = {
-  Home: () => import("@/views/user/Home.vue"),
-  Detail:()=>import("@/views/user/Detail.vue")
+const buyer = {
+  Home: () => import("@/views/buyer/Home.vue"),
+  Detail: () => import("@/views/buyer/Detail.vue"),
 };
-const seller={
-
-}
-const admin={
-  
-}
-export { Login, NotFound, user,seller,admin };
+const seller = {};
+const admin = {};
+export { Login, NotFound, buyer, seller, admin };

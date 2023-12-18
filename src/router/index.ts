@@ -1,6 +1,6 @@
 /*
  * @Date: 2023-12-05 16:17:11
- * @LastEditTime: 2023-12-12 17:18:34
+ * @LastEditTime: 2023-12-13 09:22:37
  * @FilePath: \car-mall-system\src\router\index.ts
  * @Description:
  */
@@ -12,8 +12,9 @@ import useLoginStore from "../store/login";
 import { storeToRefs } from "pinia";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
+import { ElMessage } from "element-plus";
 
-import { Login, NotFound, user, seller, admin } from "./constant";
+import { Login, NotFound, buyer, seller, admin } from "./constant";
 const whiteList = ["/login"];
 export const routes: Array<RouteRecordRaw> = [
   {
@@ -31,14 +32,14 @@ export const routes: Array<RouteRecordRaw> = [
   },
   // 页面不存在时的路由
 
-  /* {
+  {
     name: "404",
     path: "/:pathMatch(.*)*",
     meta: {
       title: "404",
     },
     component: NotFound,
-  }, */
+  },
 ];
 
 export const userRoutes: Array<RouteRecordRaw> = [
@@ -48,7 +49,7 @@ export const userRoutes: Array<RouteRecordRaw> = [
     meta: {
       title: "首页",
     },
-    component: user.Home,
+    component: buyer.Home,
   },
   {
     name: "detail",
@@ -56,7 +57,7 @@ export const userRoutes: Array<RouteRecordRaw> = [
     meta: {
       title: "详情",
     },
-    component: user.Detail,
+    component: buyer.Detail,
   },
 ];
 export const sellerRoutes: Array<RouteRecordRaw> = [];
@@ -73,18 +74,26 @@ NProgress.configure({ showSpinner: false }); //进度环显示/隐藏
 router.beforeEach(async (to, from, next) => {
   NProgress.start();
   const loginStore = useLoginStore();
-  const { role,token } = storeToRefs(loginStore);
+  const { role, token } = storeToRefs(loginStore);
   if (loginStore.isAuthenticated()) {
-    await loginStore.SET_ROUTES();
-    console.log(to,router,'to')
+    console.log(to, router, "to");
     if (to.path === "/login") {
       next({ path: "/" });
       NProgress.done();
+    }
+    if (router.getRoutes().length < 4) {
+      loginStore.SET_ROUTES();
+      next(to);
     } else {
-      // next({...to,replace:true})
       next();
     }
+    /*  else {
+      // next({...to,replace:true})
+      next();
+    } */
   } else {
+    ElMessage.error("登录超时，请重新登录！");
+    loginStore.CLEAR_STORAGE();
     //2.没有token的话可以访问白名单页面（登录页面）
     if (whiteList.indexOf(to.path) !== -1) {
       next();

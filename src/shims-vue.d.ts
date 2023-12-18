@@ -1,6 +1,6 @@
 /*
  * @Date: 2023-12-07 10:03:12
- * @LastEditTime: 2023-12-11 15:11:05
+ * @LastEditTime: 2023-12-14 11:25:51
  * @FilePath: \car-mall-system\src\shims-vue.d.ts
  * @Description:
  * 解决：
@@ -15,10 +15,18 @@ declare module "*.vue" {
   export default component;
 }
 
-import  userApi  from "./api/user";
+import { AxiosResponse } from "axios";
+declare module "axios" {
+  export interface AxiosResponse<T = any, D = any> {
+    code: number;
+    msg: string;
+  }
+}
+
+import buyerApi from "./api/buyer";
 declare module "@vue/runtime-core" {
   interface ComponentCustomProperties {
-    $userApi: typeof userApi;
+    $buyerApi: typeof buyerApi;
   }
 }
 
