@@ -1,0 +1,12 @@
+/*
+ * @Date: 2023-12-20 13:54:04
+ * @LastEditTime: 2023-12-20 14:01:00
+ * @FilePath: \car-mall-system\src\assets\scss\variables.module.scss
+ * @Description: 用于scss变量的导出，大部分用于vue文件中js中使用
+ */
+
+@import "./constant.scss";
+
+:export {
+  fontOblique: $font-oblique;
+}

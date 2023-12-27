@@ -1,6 +1,6 @@
 /*
  * @Date: 2023-12-05 14:35:51
- * @LastEditTime: 2023-12-07 16:30:53
+ * @LastEditTime: 2023-12-20 14:09:13
  * @FilePath: \car-mall-system\vite.config.ts
  * @Description:
  */
@@ -19,9 +19,15 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, 'src'),
-      //"*": resolve(""),
-
     },
+  },
+  /* 主要用途是将我们的constant.scss中的scss常量加载到全局，这样我们可以在style标签中，随意使用这些scss常量 */
+  css:{
+    preprocessorOptions:{
+      scss:{
+        additionalData:'@import "@/assets/scss/constant.scss";'
+      }
+    }
   },
   server: {
     // 是否主动唤醒浏览器

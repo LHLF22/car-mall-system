@@ -1,6 +1,6 @@
 /*
  * @Date: 2023-12-13 15:40:01
- * @LastEditTime: 2023-12-14 15:58:22
+ * @LastEditTime: 2023-12-20 16:20:05
  * @FilePath: \car-mall-system\server\db\user-sql.js
  * @Description:
  */
@@ -11,21 +11,53 @@ function generateFourDigitNumber() {
 }
 const user = {
   /* 登录 */
-  login({ account, password, role }) {},
-  /* register({phone,password,confirmPassword,code}){
-    const isPhoneExitSql=`select * from users where phone=${phone}`
-    const isPhoneExit=new Promise((resolve,reject)=>{
-      connection.query(db,(err,result)=>{
-        if(err){
-          reject(err)
+  isRoleHasAccount({ account, role }) {
+    const db = `select * from users where account=? and role=?`;
+    return new Promise((resolve, reject) => {
+      connection.query(db,[account,role], (err, result) => {
+        if (err) {
+          reject(err);
         }
-        resolve(result)
-      })
-    })
-    if(isPhoneExit.length>0){
-      
-    }
-  }, */
+        resolve(result);
+      });
+    });
+  },
+  isRoleHasPhone({ phone, role }) {
+    const db = `select * from users where phone=? and role=?`;
+    return new Promise((resolve, reject) => {
+      connection.query(db,[phone,role], (err, result) => {
+        if (err) {
+          reject(err);
+        }
+        resolve(result);
+      });
+    });
+  },
+  verifyAccountPassword({account,password,role}){
+    const db = `select * from users where account=? and role=? and password=?`;
+    return new Promise((resolve, reject) => {
+      connection.query(db,[account,role,password], (err, result) => {
+        if (err) {
+          reject(err);
+        }
+        resolve(result);
+      });
+    });
+
+  },
+  verifyPhonePassword({phone,password,role}){
+    const db = `select * from users where phone=? and role=? and password=?`;
+    return new Promise((resolve, reject) => {
+      connection.query(db,[phone,role,password], (err, result) => {
+        if (err) {
+          reject(err);
+        }
+        resolve(result);
+      });
+    });
+
+  },
+
   /* 注册时，获取验证码时，确认该手机号是否存在 */
   isPhoneExit(phone) {
     const db = `select * from users where phone=${phone}`;
@@ -105,12 +137,25 @@ const user = {
       });
     });
   },
-  /* 用户注册 */
-  register({phone,password,role}){
-    // console.log(phone,'here')
-    const db="insert into users (phone,password,role,addtime) values (?,?,?,CURRENT_TIMESTAMP)"
+  /* 验证验证码是否正确 */
+  verifyCode({phone,code}){
+    const db = "select * from verification_codes where phone_number = ? and code = ?";
     return new Promise((resolve, reject) => {
-      connection.query(db, [phone,password,role], (err, result) => {
+      connection.query(db, [phone,code], (err, result) => {
+        if (err) {
+          reject(err);
+        }
+        resolve(result);
+      });
+    });
+  },
+  /* 用户注册 */
+  register({ phone, password, role }) {
+    // console.log(phone,'here')
+    const db =
+      "insert into users (phone,password,role,addtime) values (?,?,?,CURRENT_TIMESTAMP)";
+    return new Promise((resolve, reject) => {
+      connection.query(db, [phone, password, role], (err, result) => {
         if (err) {
           reject(err);
         }

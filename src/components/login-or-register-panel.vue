@@ -1,6 +1,6 @@
 <!--
  * @Date: 2023-12-08 16:09:45
- * @LastEditTime: 2023-12-18 17:53:48
+ * @LastEditTime: 2023-12-19 10:30:51
  * @FilePath: \car-mall-system\src\components\login-or-register-panel.vue
  * @Description: 
  
@@ -21,7 +21,7 @@
       :model="loginForm"
       style="max-width: 460px"
       :rules="loginFormRule"
-      v-show="props.activeTab === 'login'"
+      v-if="props.activeTab === 'login'"
     >
       <el-form-item label="账号/手机号" prop="account">
         <el-input v-model="loginForm.account" placeholder="请输入账号/手机号" />
@@ -42,7 +42,7 @@
       :model="registerForm"
       style="max-width: 460px"
       :rules="registerFormRule"
-      v-show="props.activeTab === 'register'"
+      v-if="props.activeTab === 'register'"
     >
       <el-form-item label="手机号" prop="phone">
         <!-- <el-input v-model.model="registerForm.phone" placeholder="请输入手机号"
@@ -101,6 +101,7 @@ import useCountdown from "../hooks/useCountdown";
 const props = defineProps({
   activeTab: String,
 });
+const emit = defineEmits(["changeToLoginPanel"]);
 /* onMounted(()=>{
    clearForm(props.activeTab);
 }) */
@@ -194,7 +195,6 @@ const registerFormRule = reactive<FormRules<typeof registerForm>>({
 });
 const loginStore = useLoginStore();
 function handleSubmit() {
-  // console.log("kkkk");
   if (props.activeTab === "login") {
     loginFormRef.value.validate((valid) => {
       if (valid) {
@@ -210,11 +210,7 @@ function handleSubmit() {
           role: role.value,
         };
         isAccount ? (params.account = account) : (params.phone = account);
-        /* setTimeout(() => {
-          isLoading.value = false;
-          //调用pinia中的action
-        }, 2000); */
-        // loginStore.loginAction(params);
+        loginStore.loginAction(params);
       } else {
         ElMessage.error("请检查表单输入是否合法！");
       }
@@ -228,6 +224,10 @@ function handleSubmit() {
         if (res.code === 0) {
           registerFormRef.value.resetFields();
           //跳转到loginTab
+          emit("changeToLoginPanel");
+          if (isCounting) {
+            stopCountdown();
+          }
         }
       } else {
         ElMessage.error("请检查表单输入是否合法！");
@@ -235,8 +235,9 @@ function handleSubmit() {
     });
   }
 }
-const isFetching = ref(false);
+
 /* 获取手机验证码 */
+const isFetching = ref(false);
 const { countdown, isCounting, startCountdown, stopCountdown } = useCountdown();
 async function handleGetCode() {
   registerFormRef.value.validateField("phone", async (valid) => {
@@ -255,16 +256,19 @@ async function handleGetCode() {
     }
   });
 }
-function clearForm(activeName) {
-  if (activeName.value === "login") {
-    registerFormRef.value.resetFields();
-  } else {
-    loginFormRef.value.resetFields();
-  }
+
+/* 切换tab时清空注册tab的检验剂数据 */
+function clearRegisterForm() {
+  registerFormRef.value.resetFields();
+}
+/* 切换tab时清空登录tab的检验剂数据 */
+function clearLoginForm() {
+  loginFormRef.value.resetFields();
 }
 defineExpose({
-  clearForm,
+  clearRegisterForm,
+  clearLoginForm,
 });
 </script>
 
-<style scoped lang="less"></style>
+<style scoped lang="scss"></style>

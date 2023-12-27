@@ -1,13 +1,13 @@
 /*
  * @Date: 2023-12-08 15:08:46
- * @LastEditTime: 2023-12-14 14:26:05
+ * @LastEditTime: 2023-12-26 09:32:00
  * @FilePath: \car-mall-system\src\store\login.ts
  * @Description:
  */
 import { defineStore } from "pinia";
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-import { ElMessage } from "element-plus";
+import { useRouter, RouteRecordRaw } from "vue-router";
+import loginRegisterApi from "../api/login-register";
+import { ElMessage, ElMessageBox } from "element-plus";
 import {
   routes,
   userRoutes,
@@ -15,19 +15,21 @@ import {
   adminRoutes,
   router,
 } from "../router";
-import { RouteRecordRaw } from "vue-router";
-import { resolve } from "path";
-// import { getCurrentInstance, ComponentInternalInstance } from "vue";
+import { ref } from "vue";
 // const { proxy }: ComponentInternalInstance = getCurrentInstance();
 
 const useLoginStore = defineStore(
   "login",
   () => {
     const router = useRouter();
+    /*  if(getCurrentInstance()){
+     
+    } */
     let role = ref("");
     let token = ref("");
+    let userInfo = ref<{ account?: string }>({});
     // let isAuthenticated=ref<boolean>(false)
-    let myRoutes = ref<RouteRecordRaw[]>(routes);
+
     function SET_ROLE(roleData = "") {
       role.value = roleData;
       localStorage.setItem("role", roleData);
@@ -35,6 +37,10 @@ const useLoginStore = defineStore(
     function SET_TOKEN(tokenData = "") {
       token.value = tokenData;
       localStorage.setItem("token", tokenData);
+    }
+    function SET_USERINFO(userinfoData = {}) {
+      userInfo.value = userinfoData;
+      localStorage.setItem("userInfo", JSON.stringify(userinfoData));
     }
     // 设置是否通过验证
     function isAuthenticated() {
@@ -47,6 +53,9 @@ const useLoginStore = defineStore(
       localStorage.setItem("isAuthenticated", JSON.stringify(flag));
       return flag;
     }
+
+    let myRoutes = ref<RouteRecordRaw[]>(routes);
+
     //登录成功时，TODO:
     function SET_ROUTES() {
       let addRoutes: RouteRecordRaw[] = [];
@@ -63,14 +72,14 @@ const useLoginStore = defineStore(
       addRoutes.forEach((route: RouteRecordRaw) => {
         router.addRoute(route);
       });
-      router.addRoute({
-        name: "404",
-        path: "/:pathMatch(.*)*",
-        meta: {
-          title: "404",
-        },
-        component: () => import("@/views/404.vue"),
-      });
+      // router.addRoute({
+      //   name: "404",
+      //   path: "/:pathMatch(.*)*",
+      //   meta: {
+      //     title: "404",
+      //   },
+      //   component: () => import("@/views/404.vue"),
+      // });
       localStorage.setItem("routes", JSON.stringify(router.getRoutes()));
       myRoutes.value = router.getRoutes();
       // console.log(router.getRoutes(),'myRoutes')
@@ -78,6 +87,7 @@ const useLoginStore = defineStore(
         resolve(myRoutes.value);
       });
     }
+    /* 重置路由 */
     function RESET_ROUTES() {
       const currentRoutes = router.getRoutes();
       currentRoutes.forEach((route) => {
@@ -96,6 +106,7 @@ const useLoginStore = defineStore(
     function CLEAR_STORAGE() {
       SET_ROLE();
       SET_TOKEN();
+      SET_USERINFO();
       // SET_AUTHENTICATED()
       RESET_ROUTES();
     }
@@ -108,29 +119,41 @@ const useLoginStore = defineStore(
       localStorage.removeItem('token')
     } */
     async function loginAction(params) {
-      // const res= await proxy.$loginRegisterApi.login.login(params)
-      // if(res.code==200){
-      //跳转路由，localStorage，
-      // }
-      /* const random = Math.random() * 100;
-      setTimeout(() => {
-        if (random > 2) {
-          //跳转路由
-          // SET_AUTHENTICATED(true)
-          SET_TOKEN("hdfafuiebuwfaiefuifbwa");
-          SET_ROLE("buyer");
-          SET_ROUTES(); //TODO:
-          router.push("/home");
-        } else {
-          //登录失败
-          // ElMessage.error("出错啦");
-        }
-      }, 2000); */
-      
+      const res = await loginRegisterApi.login(params);
+      if (res.code === 0) {
+        router.replace("/home");
+        SET_ROLE(res.data.role);
+        SET_TOKEN(res.data.token);
+        SET_USERINFO(res.data.userInfo);
+        SET_ROUTES();
+      }
+    }
+    /* 退出登录 */
+    function loginOut() {
+      localStorage.clear();
+      ElMessageBox.confirm("是否退出登录?", "Warning", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          router.replace("/login");
+          ElMessage({
+            type: "success",
+            message: "退出成功",
+          });
+        })
+        .catch(() => {
+          ElMessage({
+            type: "info",
+            message: "取消退出",
+          });
+        });
     }
     return {
       role,
       token,
+      userInfo,
       isAuthenticated,
       myRoutes,
       loginAction,
@@ -140,6 +163,7 @@ const useLoginStore = defineStore(
       CLEAR_STORAGE,
       SET_ROUTES,
       RESET_ROUTES,
+      loginOut,
     };
   },
   { persist: true }

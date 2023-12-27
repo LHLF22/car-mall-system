@@ -4,11 +4,17 @@
  * @FilePath: \car-mall-system\src\api\buyer.ts
  * @Description:用户的api
  */
+import http from "../utils/request-utils";
 import { buyer } from "../interface/buyer";
 namespace buyerApi {
   export namespace home {
     export const getHomeDataApi = (data: buyer.home.userInfoType) => {
       console.log(data, "getHomeDataApi");
+    };
+  }
+  export  namespace layout {
+    export const getCarType = () => {
+      return http.get('/buyer/carType')
     };
   }
 }

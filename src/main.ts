@@ -1,6 +1,6 @@
 /*
  * @Date: 2023-12-05 14:35:51
- * @LastEditTime: 2023-12-13 09:55:45
+ * @LastEditTime: 2023-12-26 17:13:17
  * @FilePath: \car-mall-system\src\main.ts
  * @Description:
  * 1.数据持久化
@@ -16,15 +16,18 @@
  * 11.看请求配置是否生效 ----------------->这个重新搞一下，结合ts的，可以看一下以前王元红的
  * 12.之后携带token记得做上 ------------>
  * 13.TailwindCss 然后less为辅
+ * 14.看看退出登录是否后端需要写个接口，//TODO:
  *
  */
 
 import { createApp } from "vue";
 import ElementPlus from "element-plus";
 import "element-plus/dist/index.css";
+import 'element-plus/theme-chalk/display.css'
 import App from "./App.vue";
 import "normalize.css"; // 引入 normalize.css
-import "@/assets/less/common.less";
+// import "@/assets/less/common.less";
+import "@/assets/scss/index.scss"
 import * as ElementPlusIcons from "@element-plus/icons-vue";
 import zhCn from "element-plus/es/locale/lang/zh-cn";
 import "element-plus/theme-chalk/dark/css-vars.css";

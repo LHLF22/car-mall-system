@@ -1,6 +1,6 @@
 /*
  * @Date: 2023-12-05 16:17:11
- * @LastEditTime: 2023-12-13 09:22:37
+ * @LastEditTime: 2023-12-27 14:03:55
  * @FilePath: \car-mall-system\src\router\index.ts
  * @Description:
  */
@@ -15,7 +15,7 @@ import "nprogress/nprogress.css";
 import { ElMessage } from "element-plus";
 
 import { Login, NotFound, buyer, seller, admin } from "./constant";
-const whiteList = ["/login"];
+
 export const routes: Array<RouteRecordRaw> = [
   {
     name: "/",
@@ -44,30 +44,82 @@ export const routes: Array<RouteRecordRaw> = [
 
 export const userRoutes: Array<RouteRecordRaw> = [
   {
+    name: "layout",
+    path: "/home",
+    meta: {
+      title: "首页",
+    },
+    component: () => import("@/views/buyer/Layout.vue"),
+    children: [
+      {
+        name: "home",
+        path: "/home",
+        meta: {
+          title: "首页",
+        },
+        component: buyer.Home,
+      },
+      {
+        name: "detail",
+        path: "/detail",
+        meta: {
+          title: "详情",
+        },
+        component: buyer.Detail,
+      },
+    ],
+  },
+];
+export const sellerRoutes: Array<RouteRecordRaw> = [
+  {
+    name: "layout",
+    path: "/home",
+    meta: {
+      title: "首页",
+    },
+    component: () => import("@/layout/index.vue"),
+    children: [
+      {
+        path: "/home",
+        name: "home",
+        component: seller.Home,
+        meta: { icon: "" },
+      },
+      {
+        name: "detail",
+        path: "/detail",
+        meta: {
+          title: "详情",
+          icon: "",
+        },
+        component: seller.Detail,
+      },
+    ],
+  },
+];
+export const adminRoutes: Array<RouteRecordRaw> = [
+  {
     name: "home",
     path: "/home",
     meta: {
       title: "首页",
     },
-    component: buyer.Home,
-  },
-  {
-    name: "detail",
-    path: "/detail",
-    meta: {
-      title: "详情",
-    },
-    component: buyer.Detail,
+    component: () => import("@/layout/index.vue"),
+    children: [
+      {
+        path: "/home",
+        name: "home",
+        component: admin.Home,
+      },
+    ],
   },
 ];
-export const sellerRoutes: Array<RouteRecordRaw> = [];
-export const adminRoutes: Array<RouteRecordRaw> = [];
 
 export const router = createRouter({
   history: createWebHashHistory(),
   routes,
 });
-
+const whiteList = ["/login"];
 NProgress.configure({ showSpinner: false }); //进度环显示/隐藏
 
 // 全局前置守卫
@@ -83,14 +135,12 @@ router.beforeEach(async (to, from, next) => {
     }
     if (router.getRoutes().length < 4) {
       loginStore.SET_ROUTES();
-      next(to);
+      /* 原本我写的是next(to)但会有bug：登录成功后跳转的是404，在浏览器输入/login或/detail才能跳到响应页面，而且每次刷新浏览器都会跳到404，但是浏览器前进后退都可以正常显示
+      我改为to.path解决的问题是刷新浏览器后能正常显示，现在还存留一个bug:登录后跳转到的是404 */
+      next(to.path);
     } else {
       next();
     }
-    /*  else {
-      // next({...to,replace:true})
-      next();
-    } */
   } else {
     ElMessage.error("登录超时，请重新登录！");
     loginStore.CLEAR_STORAGE();

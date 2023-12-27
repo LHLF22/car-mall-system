@@ -1,0 +1,64 @@
+/*
+ * @Date: 2023-12-20 13:53:25
+ * @LastEditTime: 2023-12-27 11:43:13
+ * @FilePath: \car-mall-system\src\assets\scss\index.scss
+ * @Description: 用于放置项目中自己封装的一些常用的样式，class类名，比如flex布局，定位，字体等等
+ */
+
+@import "./constant.scss";
+*{
+  box-sizing: border-box;
+  padding:0;
+  margin:0;
+}
+.p10{
+  padding:10px;
+}
+
+.p20{
+  padding:20px;
+}
+.m10{
+  margin:10px;
+}
+.m20{
+  margin:20px;
+}
+.flex{
+  display: flex;
+  flex-wrap: wrap;
+}
+.fl{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.flSB{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.flC{
+  display: flex;
+  flex-direction: column;
+}
+.l-size {
+  font-size: $large-size;
+}
+.animate-menu {
+  transition: width 0.3s linear;
+}
+.button-width{
+  width: 44px;
+}
+.text-center{
+  text-align: center;
+}
+.pointer{
+  cursor: pointer;
+}
+.default{
+  cursor: default;
+}
+

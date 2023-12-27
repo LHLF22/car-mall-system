@@ -7,7 +7,9 @@
 import http from "../utils/request-utils";
 import { loginRegister } from "../interface/login-register";
 namespace loginRegisterApi {
-  export const login = (data: loginRegister.loginInfoType) => {};
+  export const login = (data: loginRegister.loginInfoType) => {
+    return http.post('/user/login',data)
+  };
   export const getPhoneCode = (data: loginRegister.phoneCodeType) => {
     return http.post("/user/code", data);
   };
