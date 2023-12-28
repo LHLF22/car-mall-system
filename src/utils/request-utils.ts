@@ -9,6 +9,8 @@ import Nprogress from "nprogress";
 import "nprogress/nprogress.css";
 import { ElMessage } from "element-plus";
 import { AxiosResponse } from "axios";
+import { useRouter } from "vue-router";
+const router=useRouter()
 
 const http = axios.create({
   baseURL: "http://localhost:3000",
@@ -56,7 +58,8 @@ http.interceptors.response.use(
   (err) => {
     console.log(err, "haha");
     if (err.response.status === 401) {
-      localStorage.removeItem("token");
+      localStorage.clear()
+      router.push('/login')
     }
   }
 );

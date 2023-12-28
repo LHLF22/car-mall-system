@@ -1,8 +1,8 @@
 <!--
  * @Date: 2023-12-26 16:04:02
- * @LastEditTime: 2023-12-26 17:51:27
- * @FilePath: \car-mall-system\src\components\expand-fold.vue
- * @Description: 
+ * @LastEditTime: 2023-12-28 15:19:45
+ * @FilePath: \car-mall-system\src\base-ui\expand-fold.vue
+ * @Description: 后台管理系统和买家平台侧栏的折叠按钮组件
 -->
 <template>
   <div class="expand-fold">
@@ -19,15 +19,11 @@
 import { ref, watch,markRaw } from "vue";
 import { Expand, Fold } from "@element-plus/icons-vue";
 import useLayoutStore from "../store/layout";
-const props = defineProps({
-  isText: {
-    type: Boolean,
-    default: false,
-  },
- /*  isButton:{
-    type:Boolean,
-    default:true
-  } */
+interface IProps {
+  isText:boolean
+}
+const props = withDefaults(defineProps<IProps>(), {
+  isText:false
 });
 /* 控制侧栏折叠 */
 //折叠开关图标

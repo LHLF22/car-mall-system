@@ -1,6 +1,6 @@
 /*
  * @Date: 2023-12-13 10:02:14
- * @LastEditTime: 2023-12-27 17:05:29
+ * @LastEditTime: 2023-12-28 15:22:54
  * @FilePath: \car-mall-system\server\router\userRouter.js
  * @Description: 注册、登录
  */
@@ -77,7 +77,7 @@ userRouter.post("/login", async (req, res, next) => {
       });
     }
   }
-  console.log("存在用户的话你才会看到这段代码");
+  // console.log("存在用户的话你才会看到这段代码");
   if (passwordRes.length > 0) {
     const tokenStr = jwt.sign(
       { ...params, password: "" },

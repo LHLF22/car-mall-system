@@ -1,5 +1,11 @@
 <!--
  * @Date: 2023-12-19 15:04:36
+ * @LastEditTime: 2023-12-28 15:23:06
+ * @FilePath: \car-mall-system\src\layout\menu.vue
+ * @Description: 
+-->
+<!--
+ * @Date: 2023-12-19 15:04:36
  * @LastEditTime: 2023-12-19 16:28:30
  * @FilePath: \car-mall-system\src\layout\menu.vue
  * @Description: 
@@ -23,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import subMenu from "../components/sub-menu.vue";
+import subMenu from "../components/seller-layout/sub-menu.vue";
 import { reactive, computed } from "vue";
 import { useRoute } from "vue-router";
 import { sellerRoutes, adminRoutes } from "../router";

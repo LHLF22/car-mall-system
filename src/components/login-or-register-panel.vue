@@ -1,6 +1,6 @@
 <!--
  * @Date: 2023-12-08 16:09:45
- * @LastEditTime: 2023-12-19 10:30:51
+ * @LastEditTime: 2023-12-28 15:20:39
  * @FilePath: \car-mall-system\src\components\login-or-register-panel.vue
  * @Description: 
  
@@ -98,9 +98,13 @@ import { ElMessage } from "element-plus";
 import { getCurrentInstance, ComponentInternalInstance } from "vue";
 const { proxy }: ComponentInternalInstance = getCurrentInstance();
 import useCountdown from "../hooks/useCountdown";
-const props = defineProps({
-  activeTab: String,
+interface IProps {
+  activeTab: string
+}
+const props = withDefaults(defineProps<IProps>(), {
+  activeTab:''
 });
+
 const emit = defineEmits(["changeToLoginPanel"]);
 /* onMounted(()=>{
    clearForm(props.activeTab);

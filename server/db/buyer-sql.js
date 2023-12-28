@@ -1,6 +1,6 @@
 /*
  * @Date: 2023-12-13 15:40:01
- * @LastEditTime: 2023-12-27 16:05:22
+ * @LastEditTime: 2023-12-28 15:15:57
  * @FilePath: \car-mall-system\server\db\buyer-sql.js
  * @Description:
  */
@@ -21,12 +21,11 @@ const buyer = {
     const db = "select * from car_tag";
     const res = await myPromise(db);
     const list =await Promise.all(res.map(async (el) => {
-      const dbEvery = "select name from car_type where tag= ?";
+      const dbEvery = "select name,id from car_type where tag= ?";
       let listSecond = await myPromise(dbEvery, [el.name]);
-      listSecond=listSecond.map(elem=>elem.name)
+      listSecond=listSecond.map(elem=>({name:elem.name,id:elem.id}))
       return {
-        tag: el.name,
-        icon: el.icon,
+        type:{id:el.id,tag:el.name,icon:el.icon},
         list: listSecond
       };
     })) 

@@ -1,6 +1,6 @@
 /*
  * @Date: 2023-12-05 14:35:51
- * @LastEditTime: 2023-12-26 17:13:17
+ * @LastEditTime: 2023-12-28 14:12:39
  * @FilePath: \car-mall-system\src\main.ts
  * @Description:
  * 1.数据持久化
@@ -26,7 +26,6 @@ import "element-plus/dist/index.css";
 import 'element-plus/theme-chalk/display.css'
 import App from "./App.vue";
 import "normalize.css"; // 引入 normalize.css
-// import "@/assets/less/common.less";
 import "@/assets/scss/index.scss"
 import * as ElementPlusIcons from "@element-plus/icons-vue";
 import zhCn from "element-plus/es/locale/lang/zh-cn";

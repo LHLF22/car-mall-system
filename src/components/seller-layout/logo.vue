@@ -5,11 +5,11 @@
  * @Description: 
 -->
 <template>
-  <div class="logo">
-    <span class="p10 logo-text"
-      >{{ loginStore.role === "seller" ? "商家" : "管理员" }}后台管理系统</span
+  <div class="logo flSB">
+    <el-text type="primary" class="p10 logo-text"
+      >{{ loginStore.role === "seller" ? "商家" : "管理员" }}后台管理系统</el-text
     >
-    <expand-fold ></expand-fold>
+    <expand-fold :is-text="true"></expand-fold>
    <!--  <el-button @click="layoutStore.changeOpen"
       ><el-icon><component :is="iconComponent"></component></el-icon
     ></el-button> -->
@@ -19,7 +19,7 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
 import useLoginStore from "../../store/login";
-import expandFold from "../expand-fold.vue";
+import expandFold from "../../base-ui/expand-fold.vue";
 /* import useLayoutStore from "../../store/layout";
 import { Expand, Fold } from "@element-plus/icons-vue"; */
 const loginStore = useLoginStore();
@@ -37,7 +37,8 @@ watch(
 
 <style scoped lang="scss">
 .logo-text {
-  font-size: 24px;
-  font-weight: 600;
+  font-size: 20px;
+  /* font-weight: 600; */
+  /* color:hotpink; */
 }
 </style>

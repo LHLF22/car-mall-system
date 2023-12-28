@@ -1,6 +1,6 @@
 <!--
  * @Date: 2023-12-19 15:04:49
- * @LastEditTime: 2023-12-20 10:43:46
+ * @LastEditTime: 2023-12-28 10:00:27
  * @FilePath: \car-mall-system\src\layout\header.vue
  * @Description: 
 -->
@@ -15,9 +15,9 @@
 </template>
 
 <script setup lang="ts">
-import elcolorToggle from "../components/elcolor-toggle.vue";
-import logo from "../components/layout-header/logo.vue";
-import loginOut from "../components/layout-header/login-out.vue";
+import elcolorToggle from "../base-ui/elcolor-toggle.vue";
+import logo from "../components/seller-layout/logo.vue";
+import loginOut from "../components/seller-layout/login-out.vue";
 </script>
 
 <style scoped lang="scss">

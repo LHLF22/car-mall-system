@@ -1,13 +1,12 @@
 <template>
   <div class="login-out fl">
-    <div class="p20"><el-avatar
-      :size="45"
-      src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
-    /></div>
-    
+    <div class="p20">
+      <avatar/>
+    </div>
+
     <el-dropdown trigger="click" @command="handleCommand">
-      <div>
-        <span>{{ loginStore.userInfo.account }}</span>
+      <div class="fl">
+        <nickname :show-tooltip="true"/>
         <el-icon>
           <arrow-down />
         </el-icon>
@@ -31,22 +30,15 @@
 </template>
 
 <script setup lang="ts">
-import {
-  ArrowDown,
-  Check,
-  CircleCheck,
-  CirclePlus,
-  CirclePlusFilled,
-  House,
-  Close,
-  Plus,
-} from "@element-plus/icons-vue";
+import { ArrowDown, House, Close } from "@element-plus/icons-vue";
 import useLoginStore from "../../store/login";
+import avatar from "../../base-ui/avatar.vue";
+import nickname from "../../base-ui/nickname.vue";
 const loginStore = useLoginStore();
 function handleCommand(command: string) {
   if (command === "a") {
   } else if (command === "b") {
-    console.log(command);
+    // console.log(command);
     loginStore.loginOut();
   }
 }

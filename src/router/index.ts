@@ -1,6 +1,6 @@
 /*
  * @Date: 2023-12-05 16:17:11
- * @LastEditTime: 2023-12-27 14:03:55
+ * @LastEditTime: 2023-12-28 15:23:13
  * @FilePath: \car-mall-system\src\router\index.ts
  * @Description:
  */
@@ -67,6 +67,30 @@ export const userRoutes: Array<RouteRecordRaw> = [
         },
         component: buyer.Detail,
       },
+      {
+        name: "person",
+        path: "/person",
+        meta: {
+          title: "个人中心",
+        },
+        component: buyer.Person,
+      },
+      {
+        name: "concret",
+        path: "/concret/:id",
+        meta: {
+          title: "具体类型",
+        },
+        component: buyer.Concret,
+      },
+      {
+        name: "category",
+        path: "/category/:id",
+        meta: {
+          title: "具体类型",
+        },
+        component: buyer.Category,
+      },
     ],
   },
 ];
@@ -128,7 +152,7 @@ router.beforeEach(async (to, from, next) => {
   const loginStore = useLoginStore();
   const { role, token } = storeToRefs(loginStore);
   if (loginStore.isAuthenticated()) {
-    console.log(to, router, "to");
+    // console.log(to, router, "to");
     if (to.path === "/login") {
       next({ path: "/" });
       NProgress.done();
@@ -161,7 +185,7 @@ router.afterEach(async () => {
   // await router.isReady();
   // console.log(loginStore.role,'ff')
   // console.log(JSON.parse(localStorage.getItem('routes')),'fewef')
-  console.log(router.getRoutes(), "hai");
+  // console.log(router.getRoutes(), "hai");
   NProgress.done(true);
 });
 export default router;
