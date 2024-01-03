@@ -6,7 +6,7 @@
  */
 import { defineStore } from "pinia";
 import { useRouter, RouteRecordRaw } from "vue-router";
-import loginRegisterApi from "../api/login-register";
+import userApi from "../api/user";
 import { ElMessage, ElMessageBox } from "element-plus";
 import {
   routes,
@@ -16,18 +16,27 @@ import {
   router,
 } from "../router";
 import { ref } from "vue";
+// import useLayoutStore from "./layout";
 // const { proxy }: ComponentInternalInstance = getCurrentInstance();
 
 const useLoginStore = defineStore(
   "login",
   () => {
     const router = useRouter();
+    // const layoutStore=useLayoutStore()
     /*  if(getCurrentInstance()){
-     
     } */
     let role = ref("");
     let token = ref("");
-    let userInfo = ref<{ account?: string }>({});
+    let userInfo = ref<{
+      account?: string;
+      id?: number;
+      role?: string;
+      gender?: string 
+      introduction?:string
+      password?:string
+    }>({});
+      
     // let isAuthenticated=ref<boolean>(false)
 
     function SET_ROLE(roleData = "") {
@@ -119,9 +128,10 @@ const useLoginStore = defineStore(
       localStorage.removeItem('token')
     } */
     async function loginAction(params) {
-      const res = await loginRegisterApi.login(params);
+      const res = await userApi.login(params);
       if (res.code === 0) {
         router.replace("/home");
+        // layoutStore.initBread()
         SET_ROLE(res.data.role);
         SET_TOKEN(res.data.token);
         SET_USERINFO(res.data.userInfo);
@@ -159,6 +169,7 @@ const useLoginStore = defineStore(
       loginAction,
       SET_ROLE,
       SET_TOKEN,
+      SET_USERINFO,
       // SET_AUTHENTICATED,
       CLEAR_STORAGE,
       SET_ROUTES,

@@ -30,9 +30,9 @@ declare module "@vue/runtime-core" {
   }
 }
 
-import loginRegisterApi from "./api/login-register";
+import userApi from "./api/user";
 declare module "@vue/runtime-core" {
   interface ComponentCustomProperties {
-    $loginRegisterApi: typeof loginRegisterApi;
+    $userApi: typeof userApi;
   }
 }

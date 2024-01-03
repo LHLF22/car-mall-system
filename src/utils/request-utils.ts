@@ -9,8 +9,9 @@ import Nprogress from "nprogress";
 import "nprogress/nprogress.css";
 import { ElMessage } from "element-plus";
 import { AxiosResponse } from "axios";
-import { useRouter } from "vue-router";
-const router=useRouter()
+// import { useRouter } from "vue-router";
+// const router=useRouter()
+import router from '@/router/index';
 
 const http = axios.create({
   baseURL: "http://localhost:3000",
@@ -60,6 +61,7 @@ http.interceptors.response.use(
     if (err.response.status === 401) {
       localStorage.clear()
       router.push('/login')
+      ElMessage.error('您没有权限，请重新登录！')
     }
   }
 );

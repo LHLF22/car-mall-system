@@ -1,6 +1,6 @@
 /*
  * @Date: 2023-12-13 10:02:14
- * @LastEditTime: 2023-12-28 15:22:54
+ * @LastEditTime: 2024-01-02 16:48:34
  * @FilePath: \car-mall-system\server\router\userRouter.js
  * @Description: 注册、登录
  */
@@ -24,12 +24,9 @@ const userRouter = express.Router();
  * @api {post} /user/login 用户登录
  * @apiName 登录
  * @apiGroup 登陆与注册
- * @apiParam {String} account/phone=''
- * @apiParam {String} password=''
- * @apiParam {String} role=''
- * @apiSuccess {Number} code 0
- * @apiSuccess {Object} data userInfo、token、role
- * @apiSuccess {String} msg 提示信息
+ * @apiParam {String} account/phone sanhua/19830192015 账号
+ * @apiParam {String} password 123456 密码
+ * @apiParam {String} role seller 角色
  * @apiSuccessExample Success-Response:
  *     {
  *       "code": 0,
@@ -87,7 +84,7 @@ userRouter.post("/login", async (req, res, next) => {
       }
     );
     // console.log(passwordRes, "passwordRes");
-    const { id, phone, account, role } = passwordRes[0];
+    const { id, phone, account, role, gender, introduction,password } = passwordRes[0];
     res.send({
       code: 0,
       msg: "登录成功",
@@ -98,7 +95,10 @@ userRouter.post("/login", async (req, res, next) => {
           id,
           account,
           phone,
+          password,
           role,
+          gender,
+          introduction,
         },
       },
     });
@@ -111,16 +111,22 @@ userRouter.post("/login", async (req, res, next) => {
 });
 /* 注册 */
 /**
- * @api {get} /user/login 注册用户
+ * @api {post} /user/register 用户注册
+ * @apiName 用户注册
  * @apiGroup 登陆与注册
+ * @apiParam {String} phone 19830192015 手机号
+ * @apiParam {String} password 123456 密码
+ * @apiParam {String} role seller 角色
+ * @apiSuccessExample Success-Response:
+ *     {
+ *       code: 0,
+ *        msg:"注册成功"
+ *     }
  */
 //我的注册逻辑，先判断code是不是为0，不为0的话判断是否正确，正确的话就进行注册，
 userRouter.post("/register", async (req, res, next) => {
   const { phone, password, role, code } = req.body;
   const result = await userSql.getPhoneCode(phone);
-  // console.log(result,'result')
-  // console.log(result[0].code===0,'result code')
-  // console.log(result[0].code==0,'result code2')
   if (result.length > 0) {
     if (result[0].code == 0) {
       res.send({
@@ -170,16 +176,13 @@ userRouter.post("/register", async (req, res, next) => {
  * @api {post} /user/code 发送验证码
  * @apiName 发送验证码
  * @apiGroup 登陆与注册
- * @apiParam {String} phone=''
- * @apiSuccess {Number} code 0
- * @apiSuccess {Object} data 验证码code
- * @apiSuccess {String} msg 提示信息
+ * @apiParam {String} phone 19830192017 手机号
  * @apiSuccessExample Success-Response:
  *     {
  *       code: 0,
  *       data: {
  *              code:3298
- * },
+ *             },
  *        msg:"登录成功"
  *     }
  */
@@ -212,6 +215,95 @@ userRouter.post("/code", async (req, res, next) => {
       });
     }
   }
+});
+
+/* 修改用户名 */
+userRouter.post("/username", async (req, res, next) => {
+  const { account, role, id } = req.body;
+  const isExitAccount = await userSql.isRoleHasAccount({ account, role });
+  if (isExitAccount.length > 0) {
+    res.send({
+      code: -1,
+      msg: "该用户名已存在",
+    });
+  } else {
+    const result = await userSql.editAccountName({ account, id });
+    if (result.affectedRows === 1) {
+      // console.log(result,'result')
+      res.send({
+        code: 0,
+        data: {
+          account,
+        },
+        msg: "修改用户名成功",
+      });
+    } else {
+      res.send({
+        code: -1,
+        msg: "出错啦",
+      });
+    }
+  }
+});
+/* 修改密码 */
+userRouter.post("/password", async (req, res, next) => {
+  const { password, id } = req.body;
+  const result = await userSql.editPassword({ password, id });
+    if (result.affectedRows === 1) {
+      // console.log(result,'result')
+      res.send({
+        code: 0,
+        data: {
+          password,
+        },
+        msg: "修改密码成功",
+      });
+    } else {
+      res.send({
+        code: -1,
+        msg: "出错啦",
+      });
+    }
+});
+/* 修改性别 */
+userRouter.post("/gender", async (req, res, next) => {
+  const { gender, id } = req.body;
+  const result = await userSql.editGender({ gender, id });
+    if (result.affectedRows === 1) {
+      // console.log(result,'result')
+      res.send({
+        code: 0,
+        data: {
+          gender,
+        },
+        msg: "修改密码成功",
+      });
+    } else {
+      res.send({
+        code: -1,
+        msg: "出错啦",
+      });
+    }
+});
+/* 修改个人简介 */
+userRouter.post("/introduction", async (req, res, next) => {
+  const { introduction, id } = req.body;
+  const result = await userSql.editIntroduction({ introduction, id });
+    if (result.affectedRows === 1) {
+      // console.log(result,'result')
+      res.send({
+        code: 0,
+        data: {
+          introduction,
+        },
+        msg: "修改密码成功",
+      });
+    } else {
+      res.send({
+        code: -1,
+        msg: "出错啦",
+      });
+    }
 });
 // 将路由对象向外导出
 module.exports = userRouter;

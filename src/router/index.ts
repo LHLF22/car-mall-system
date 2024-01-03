@@ -1,6 +1,6 @@
 /*
  * @Date: 2023-12-05 16:17:11
- * @LastEditTime: 2023-12-28 15:23:13
+ * @LastEditTime: 2023-12-29 15:27:02
  * @FilePath: \car-mall-system\src\router\index.ts
  * @Description:
  */
@@ -9,6 +9,7 @@ import { createRouter, createWebHashHistory } from "vue-router";
 import type { RouteRecordRaw } from "vue-router";
 
 import useLoginStore from "../store/login";
+import useLayoutStore from "../store/layout";
 import { storeToRefs } from "pinia";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
@@ -46,9 +47,6 @@ export const userRoutes: Array<RouteRecordRaw> = [
   {
     name: "layout",
     path: "/home",
-    meta: {
-      title: "首页",
-    },
     component: () => import("@/views/buyer/Layout.vue"),
     children: [
       {
@@ -87,7 +85,7 @@ export const userRoutes: Array<RouteRecordRaw> = [
         name: "category",
         path: "/category/:id",
         meta: {
-          title: "具体类型",
+          title: "具体分类",
         },
         component: buyer.Category,
       },
@@ -98,42 +96,58 @@ export const sellerRoutes: Array<RouteRecordRaw> = [
   {
     name: "layout",
     path: "/home",
-    meta: {
-      title: "首页",
-    },
     component: () => import("@/layout/index.vue"),
     children: [
       {
         path: "/home",
         name: "home",
         component: seller.Home,
-        meta: { icon: "" },
+        meta: { icon: "House", title: "首页" },
       },
       {
         name: "detail",
         path: "/detail",
         meta: {
           title: "详情",
-          icon: "",
+          icon: "Document",
         },
         component: seller.Detail,
+      },
+      {
+        name: "person",
+        path: "/person",
+        meta: {
+          title: "个人中心",
+          icon: "Document",
+        },
+        component: seller.Person,
       },
     ],
   },
 ];
 export const adminRoutes: Array<RouteRecordRaw> = [
   {
-    name: "home",
+    name: "layout",
     path: "/home",
-    meta: {
-      title: "首页",
-    },
     component: () => import("@/layout/index.vue"),
     children: [
       {
         path: "/home",
         name: "home",
+        meta: {
+          title: "首页",
+          icon: "House",
+        },
         component: admin.Home,
+      },
+      {
+        name: "person",
+        path: "/person",
+        meta: {
+          title: "个人中心",
+          icon: "Document",
+        },
+        component: admin.Person,
       },
     ],
   },
@@ -149,7 +163,10 @@ NProgress.configure({ showSpinner: false }); //进度环显示/隐藏
 // 全局前置守卫
 router.beforeEach(async (to, from, next) => {
   NProgress.start();
+  const layoutStore = useLayoutStore();
+  layoutStore.initBread();
   const loginStore = useLoginStore();
+
   const { role, token } = storeToRefs(loginStore);
   if (loginStore.isAuthenticated()) {
     // console.log(to, router, "to");

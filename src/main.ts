@@ -23,10 +23,10 @@
 import { createApp } from "vue";
 import ElementPlus from "element-plus";
 import "element-plus/dist/index.css";
-import 'element-plus/theme-chalk/display.css'
+import "element-plus/theme-chalk/display.css";
 import App from "./App.vue";
 import "normalize.css"; // 引入 normalize.css
-import "@/assets/scss/index.scss"
+import "@/assets/scss/index.scss";
 import * as ElementPlusIcons from "@element-plus/icons-vue";
 import zhCn from "element-plus/es/locale/lang/zh-cn";
 import "element-plus/theme-chalk/dark/css-vars.css";
@@ -44,9 +44,9 @@ app.config.globalProperties.$http = {
   buyer,
 } */
 import buyerApi from "./api/buyer";
-import loginRegisterApi from "./api/login-register";
+import userApi from "./api/user";
 app.config.globalProperties.$buyerApi = buyerApi;
-app.config.globalProperties.$loginRegisterApi = loginRegisterApi;
+app.config.globalProperties.$userApi = userApi;
 app.use(ElementPlus).use(store).use(router).mount("#app");
 
 // size 用于设置表单组件的默认尺寸，zIndex 用于设置弹出组件的层级，zIndex 的默认值为 2000。

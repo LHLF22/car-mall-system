@@ -1,6 +1,6 @@
 /*
  * @Date: 2023-12-13 15:40:01
- * @LastEditTime: 2023-12-20 16:20:05
+ * @LastEditTime: 2024-01-02 16:49:03
  * @FilePath: \car-mall-system\server\db\user-sql.js
  * @Description:
  */
@@ -10,11 +10,11 @@ function generateFourDigitNumber() {
   return randomNumber.toString();
 }
 const user = {
-  /* 登录 */
+  /* 该角色是否有该账号 */
   isRoleHasAccount({ account, role }) {
     const db = `select * from users where account=? and role=?`;
     return new Promise((resolve, reject) => {
-      connection.query(db,[account,role], (err, result) => {
+      connection.query(db, [account, role], (err, result) => {
         if (err) {
           reject(err);
         }
@@ -22,10 +22,11 @@ const user = {
       });
     });
   },
+  /* 该角色是否有这手机号 */
   isRoleHasPhone({ phone, role }) {
     const db = `select * from users where phone=? and role=?`;
     return new Promise((resolve, reject) => {
-      connection.query(db,[phone,role], (err, result) => {
+      connection.query(db, [phone, role], (err, result) => {
         if (err) {
           reject(err);
         }
@@ -33,29 +34,29 @@ const user = {
       });
     });
   },
-  verifyAccountPassword({account,password,role}){
+  /* 验证账号登录时密码是否正确 */
+  verifyAccountPassword({ account, password, role }) {
     const db = `select * from users where account=? and role=? and password=?`;
     return new Promise((resolve, reject) => {
-      connection.query(db,[account,role,password], (err, result) => {
+      connection.query(db, [account, role, password], (err, result) => {
         if (err) {
           reject(err);
         }
         resolve(result);
       });
     });
-
   },
-  verifyPhonePassword({phone,password,role}){
+  /* 验证手机号登录时密码是否正确 */
+  verifyPhonePassword({ phone, password, role }) {
     const db = `select * from users where phone=? and role=? and password=?`;
     return new Promise((resolve, reject) => {
-      connection.query(db,[phone,role,password], (err, result) => {
+      connection.query(db, [phone, role, password], (err, result) => {
         if (err) {
           reject(err);
         }
         resolve(result);
       });
     });
-
   },
 
   /* 注册时，获取验证码时，确认该手机号是否存在 */
@@ -138,10 +139,11 @@ const user = {
     });
   },
   /* 验证验证码是否正确 */
-  verifyCode({phone,code}){
-    const db = "select * from verification_codes where phone_number = ? and code = ?";
+  verifyCode({ phone, code }) {
+    const db =
+      "select * from verification_codes where phone_number = ? and code = ?";
     return new Promise((resolve, reject) => {
-      connection.query(db, [phone,code], (err, result) => {
+      connection.query(db, [phone, code], (err, result) => {
         if (err) {
           reject(err);
         }
@@ -151,7 +153,6 @@ const user = {
   },
   /* 用户注册 */
   register({ phone, password, role }) {
-    // console.log(phone,'here')
     const db =
       "insert into users (phone,password,role,addtime) values (?,?,?,CURRENT_TIMESTAMP)";
     return new Promise((resolve, reject) => {
@@ -163,16 +164,11 @@ const user = {
       });
     });
   },
-  //查询所有用户信息
-  LoginByAccount(account) {
-    const db =
-      "select * from manager where name='" +
-      account.name +
-      "' and password = '" +
-      account.password +
-      "'";
+  /* 修改用户名 */
+  editAccountName({ account, id }) {
+    const db = `update users set account =? where id= ?`;
     return new Promise((resolve, reject) => {
-      connection.query(db, (err, result) => {
+      connection.query(db, [account, id], (err, result) => {
         if (err) {
           reject(err);
         }
@@ -180,11 +176,35 @@ const user = {
       });
     });
   },
-  //登录后更新manager的token
-  UpdateToken(token) {
-    const db = "update manager set token ='" + token + "'";
+  /* 修改密码 */
+  editPassword({ password, id }) {
+    const db = `update users set password =? where id= ?`;
     return new Promise((resolve, reject) => {
-      connection.query(db, (err, result) => {
+      connection.query(db, [password, id], (err, result) => {
+        if (err) {
+          reject(err);
+        }
+        resolve(result);
+      });
+    });
+  },
+  /* 修改性别*/
+  editGender({ gender, id }) {
+    const db = `update users set gender =? where id= ?`;
+    return new Promise((resolve, reject) => {
+      connection.query(db, [gender, id], (err, result) => {
+        if (err) {
+          reject(err);
+        }
+        resolve(result);
+      });
+    });
+  },
+  /* 修改个人简介 */
+  editIntroduction({ introduction, id }) {
+    const db = `update users set introduction =? where id= ?`;
+    return new Promise((resolve, reject) => {
+      connection.query(db, [introduction, id], (err, result) => {
         if (err) {
           reject(err);
         }

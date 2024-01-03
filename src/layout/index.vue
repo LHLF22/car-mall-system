@@ -1,6 +1,6 @@
 <!--
  * @Date: 2023-12-19 15:16:20
- * @LastEditTime: 2023-12-26 17:08:58
+ * @LastEditTime: 2023-12-29 10:41:00
  * @FilePath: \car-mall-system\src\layout\index.vue
  * @Description: 
 -->
@@ -14,14 +14,15 @@
       <!-- 侧栏 -->
       <el-aside
         class="animate-menu"
-        :width="layoutStore.isOpen ? '64px' : '280px'"
+        :width="layoutStore.isOpen ? '64px' : '200px'"
       >
         <Menu></Menu>
       </el-aside>
       <!-- 中间main部分 -->
       <el-container>
-        <el-header class="breadcrumb">
+        <el-header class="breadcrumb f">
           <!-- 面包屑 -->
+          <breadcrumb/>
         </el-header>
         <el-main>
           <!-- 中间的 嵌套路由-->
@@ -39,6 +40,7 @@
 </template>
 
 <script setup lang="ts">
+import breadcrumb from "../components/seller-layout/breadcrumb.vue";
 import Menu from "./menu.vue";
 import Header from "./header.vue";
 import useLayoutStore from "../store/layout";

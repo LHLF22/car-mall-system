@@ -34,11 +34,13 @@ import { ArrowDown, House, Close } from "@element-plus/icons-vue";
 import useLoginStore from "../../store/login";
 import avatar from "../../base-ui/avatar.vue";
 import nickname from "../../base-ui/nickname.vue";
+import {useRouter} from 'vue-router'
+const router=useRouter()
 const loginStore = useLoginStore();
 function handleCommand(command: string) {
   if (command === "a") {
+    router.push('/person')
   } else if (command === "b") {
-    // console.log(command);
     loginStore.loginOut();
   }
 }

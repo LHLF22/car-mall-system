@@ -99,10 +99,10 @@ import { getCurrentInstance, ComponentInternalInstance } from "vue";
 const { proxy }: ComponentInternalInstance = getCurrentInstance();
 import useCountdown from "../hooks/useCountdown";
 interface IProps {
-  activeTab: string
+  activeTab: string;
 }
 const props = withDefaults(defineProps<IProps>(), {
-  activeTab:''
+  activeTab: "",
 });
 
 const emit = defineEmits(["changeToLoginPanel"]);
@@ -224,7 +224,7 @@ function handleSubmit() {
       if (valid) {
         const params = { ...registerForm, role: role.value };
         delete params.confirmPassword;
-        const res = await proxy.$loginRegisterApi.register(params);
+        const res = await proxy.$userApi.register(params);
         if (res.code === 0) {
           registerFormRef.value.resetFields();
           //跳转到loginTab
@@ -248,7 +248,7 @@ async function handleGetCode() {
     if (valid) {
       isFetching.value = true;
       startCountdown();
-      const res = await proxy.$loginRegisterApi.getPhoneCode({
+      const res = await proxy.$userApi.getPhoneCode({
         phone: registerForm.phone,
       });
       if (res.code !== 0) {

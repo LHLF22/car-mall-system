@@ -11,14 +11,16 @@ const buyer = {
   Home: () => import("@/views/buyer/Home.vue"),
   Detail: () => import("@/views/buyer/Detail.vue"),
   Person: () => import("@/views/buyer/Person.vue"),
-  Concret:() => import("@/views/buyer/Concret.vue"),
-  Category:() => import("@/views/buyer/Category.vue"),
+  Concret: () => import("@/views/buyer/Concret.vue"),
+  Category: () => import("@/views/buyer/Category.vue"),
 };
 const seller = {
-  Home:() => import("@/views/seller/Home.vue"),
-  Detail:()=>import('@/views/seller/Detail.vue')
+  Home: () => import("@/views/seller/Home.vue"),
+  Detail: () => import("@/views/seller/Detail.vue"),
+  Person:() => import("@/layout/person.vue"),
 };
 const admin = {
-  Home:() => import("@/views/admin/Home.vue"),
+  Home: () => import("@/views/admin/Home.vue"),
+  Person:() => import("@/layout/person.vue"),
 };
 export { Login, NotFound, buyer, seller, admin };
