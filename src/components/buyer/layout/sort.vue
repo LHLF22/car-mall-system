@@ -8,14 +8,14 @@
   <div class="sort flex">
     <div
       @click="
-        router.push(`/category/${props.data.type.id}`),
+        router.push(`/category/${props.data.type.id}?name=全部`),
         buyerLayoutStore.changeActiveName('全部')
       "
     >
       <buttonHighlight
         :is-small-margin="true"
         :is-small="true"
-        :path="`/category/${props.data.type.id}`"
+        :path="`/category/${props.data.type.id}?name=全部`"
         :active-name="'全部'"
       >
         <el-icon><component :is="props.data.type.icon"></component></el-icon>
@@ -25,7 +25,7 @@
 
     <div v-for="(item, index) in props.data.list" :key="item.id">
       <buttonHighlight
-        :path="`/category/${props.data.type.id}`"
+        :path="`/category/${props.data.type.id}?name=${item.name}`"
         :active-name="item.name"
         :is-small-margin="true"
         :is-small="true"

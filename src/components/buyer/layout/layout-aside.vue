@@ -74,7 +74,7 @@
           :key="item.type.id"
         >
           <buttonHighlight
-            :path="`/category/${item.type.id}`"
+            :path="`/category/${item.type.id}?name=全部`"
             :active-name="'全部'"
             ><el-icon><component :is="item.type.icon"></component></el-icon
           ></buttonHighlight>
