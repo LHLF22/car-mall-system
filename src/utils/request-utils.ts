@@ -1,6 +1,6 @@
 /*
  * @Date: 2023-12-05 17:17:03
- * @LastEditTime: 2023-12-27 17:14:50
+ * @LastEditTime: 2024-01-04 14:32:16
  * @FilePath: \car-mall-system\src\utils\request-utils.ts
  * @Description:
  */
@@ -11,7 +11,7 @@ import { ElMessage } from "element-plus";
 import { AxiosResponse } from "axios";
 // import { useRouter } from "vue-router";
 // const router=useRouter()
-import router from '@/router/index';
+import router from "@/router/index";
 
 const http = axios.create({
   baseURL: "http://localhost:3000",
@@ -24,7 +24,7 @@ const NETWORK_ERROR = "网络错误，请联系开发人员";
  */
 http.interceptors.request.use(
   (req) => {
-    console.log("请求拦截器=>", req);
+    // console.log("请求拦截器=>", req);
     const token = localStorage.getItem("token");
     if (token) {
       req.headers.Authorization = "Bearer " + token;
@@ -45,7 +45,7 @@ http.interceptors.request.use(
 
 http.interceptors.response.use(
   (res) => {
-    console.log("响应拦截器=>", res);
+    // console.log("响应拦截器=>", res);
     Nprogress.done();
     if (res.status == 200) {
       if (res.data.code != 0) {
@@ -59,9 +59,9 @@ http.interceptors.response.use(
   (err) => {
     console.log(err, "haha");
     if (err.response.status === 401) {
-      localStorage.clear()
-      router.push('/login')
-      ElMessage.error('您没有权限，请重新登录！')
+      localStorage.clear();
+      router.push("/login");
+      ElMessage.error("登录超时，请重新登录！");
     }
   }
 );

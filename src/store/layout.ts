@@ -14,7 +14,7 @@ const useLayoutStore = defineStore(
   "layout",
   () => {
     /* 控制侧栏菜单的开关 */
-    const isOpen = ref(false);
+    const isOpen = ref(false); //false为折叠
     function changeOpen() {
       isOpen.value = !isOpen.value;
     }

@@ -1,12 +1,30 @@
 <!--
  * @Date: 2023-12-28 14:48:06
- * @LastEditTime: 2024-01-03 17:42:49
+ * @LastEditTime: 2024-02-04 15:14:28
  * @FilePath: \car-mall-system\src\views\buyer\Category.vue
- * @Description: 
+ * @Description: 编写 次要分类标签页 的页面
 -->
 <template>
   <div class="Category">
-    <div>{{ title }}</div>
+    <!-- <HeaderSecond>
+      <template #title>
+        {{ title }}
+      </template>
+      <template #desc> haha </template>
+    </HeaderSecond> -->
+    <el-tabs
+      
+      v-model="buyerLayoutStore.activeName"
+      @tab-change="(name) => buyerLayoutStore.changeActiveName(name)"
+    >
+      <el-tab-pane
+        v-for="item in categories"
+        :key="item.id"
+        :label="item.name"
+        :name="item.name"
+        >{{ item.name }}</el-tab-pane
+      >
+    </el-tabs>
   </div>
 </template>
 
@@ -14,16 +32,30 @@
 import { ref } from "vue";
 import { useRoute } from "vue-router";
 import { getCurrentInstance, ComponentInternalInstance } from "vue";
-
-const route = useRoute();
+import HeaderSecond from "../../components/buyer/layout/header.vue";
+import useBuyerLayoutStore from "../../store/buyer-layout";
 const { proxy }: ComponentInternalInstance = getCurrentInstance();
+const route = useRoute();
+const buyerLayoutStore = useBuyerLayoutStore();
 
+//获取页面的主要分类：车身类型
 const title = ref<string>("");
 proxy.$buyerApi.category
   .getCarCategory({ id: parseInt(route.params.id as string) })
   .then((res) => {
     title.value = res.data.name;
   });
+
+//获取主要分类下的次要分类
+const categories = ref<any[]>([]);
+proxy.$buyerApi.category
+  .getCategoryNameAll({ id: parseInt(route.params.id as string) })
+  .then((res) => {
+    categories.value = res.data;
+    // categories.value.unshift({ id: -1, name: "全部" });
+  });
+
+
 </script>
 
 <style scoped lang="scss"></style>

@@ -1,6 +1,6 @@
 <!--
  * @Date: 2023-12-28 10:08:53
- * @LastEditTime: 2023-12-28 10:34:12
+ * @LastEditTime: 2024-01-04 14:58:49
  * @FilePath: \car-mall-system\src\base-ui\nickname.vue
  * @Description: 
 -->
@@ -28,7 +28,7 @@ const loginStore = useLoginStore();
 import useLayoutStore from "../store/layout";
 const layoutStore = useLayoutStore();
 interface IProps {
-  showTooltip:boolean
+  showTooltip?:boolean
 }
 // 2.定义默认值
 const props = withDefaults(defineProps<IProps>(), {

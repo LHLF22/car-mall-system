@@ -1,6 +1,6 @@
 /*
  * @Date: 2023-12-05 16:17:11
- * @LastEditTime: 2023-12-29 15:27:02
+ * @LastEditTime: 2024-01-04 14:55:57
  * @FilePath: \car-mall-system\src\router\index.ts
  * @Description:
  */

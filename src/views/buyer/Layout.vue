@@ -12,6 +12,7 @@
         :width="layoutStore.isOpen ? '90px' : '300px'"
       >
         <layoutAside></layoutAside>
+        <elcolor-toggle></elcolor-toggle>
       </el-aside>
       <el-main>
         <!-- 中间的 嵌套路由-->
@@ -29,6 +30,7 @@
 <script setup lang="ts">
 import useLayoutStore from "../../store/layout";
 import layoutAside from "../../components/buyer/layout/layout-aside.vue";
+import elcolorToggle from "../../base-ui/elcolor-toggle.vue";
 const layoutStore = useLayoutStore();
 </script>
 <style scoped lang="scss">

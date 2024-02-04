@@ -1,7 +1,7 @@
 <!--
  * @Date: 2023-12-28 17:20:41
- * @LastEditTime: 2023-12-29 09:55:03
- * @FilePath: \car-mall-system\src\components\seller-layout\breadcrumb.vue
+ * @LastEditTime: 2024-01-04 15:04:07
+ * @FilePath: \car-mall-system\src\components\breadcrumb.vue
  * @Description: 
 -->
 <template>
@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import useLayoutStore from "../../store/layout";
+import useLayoutStore from "../store/layout";
 const layoutStore = useLayoutStore();
 import { useRoute, useRouter } from "vue-router";
 const route = useRoute();

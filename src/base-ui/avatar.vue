@@ -5,7 +5,7 @@
  * @Description: 
 -->
 <template>
-  <el-avatar :size="props.avatarSize" class="avatar">{{ loginStore.userInfo.account[0] }}</el-avatar>
+  <el-avatar :size="props.avatarSize" class="avatar">{{loginStore.userInfo.account[0] }}</el-avatar>
 </template>
 <script setup lang="ts">
 import useLoginStore from "../store/login";

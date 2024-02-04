@@ -1,6 +1,6 @@
 <!--
  * @Date: 2023-12-19 15:16:20
- * @LastEditTime: 2023-12-29 10:41:00
+ * @LastEditTime: 2024-01-04 15:04:32
  * @FilePath: \car-mall-system\src\layout\index.vue
  * @Description: 
 -->
@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import breadcrumb from "../components/seller-layout/breadcrumb.vue";
+import breadcrumb from "../components/breadcrumb.vue";
 import Menu from "./menu.vue";
 import Header from "./header.vue";
 import useLayoutStore from "../store/layout";

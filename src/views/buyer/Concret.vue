@@ -1,16 +1,26 @@
 <!--
  * @Date: 2023-12-28 14:37:10
- * @LastEditTime: 2024-01-03 17:52:35
+ * @LastEditTime: 2024-01-04 15:41:34
  * @FilePath: \car-mall-system\src\views\buyer\Concret.vue
- * @Description: 
+ * @Description: 这个页面暂时作废
 -->
 <template>
   <div class="Concret">
-    <div>{{ title }}</div>
+    <HeaderSecond>
+      <template #title>
+        {{ title }}
+      </template>
+      <template #desc> haha </template>
+    </HeaderSecond>
+    <div>
+      <sort :data="item" v-for="item in carTypeData" :key="item.type.id"></sort>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import HeaderSecond from "../../components/buyer/layout/header.vue";
+import sort from "../../components/buyer/layout/sort.vue";
 import { ref } from "vue";
 import { useRoute } from "vue-router";
 import { getCurrentInstance, ComponentInternalInstance } from "vue";
@@ -24,6 +34,11 @@ proxy.$buyerApi.concret
   .then((res) => {
     title.value = res.data.name;
   });
+
+let carTypeData = ref<any[]>([]);
+proxy.$buyerApi.layout.getCarType().then((res) => {
+  carTypeData.value = res.data;
+});
 </script>
 
 <style scoped lang="scss"></style>

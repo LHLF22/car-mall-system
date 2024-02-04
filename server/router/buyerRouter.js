@@ -42,7 +42,7 @@ buyerRouter.get("/carType", async (req, res, next) => {
 });
 /* 通过id获取汽车分类 */
 buyerRouter.post("/carCategorySpecial", async (req, res, next) => {
-  console.log(req.body)
+  // console.log(req.body);
   const result = await buyerSql.getCarCategory(req.body.id);
   if (result.length > 0) {
     res.send({
@@ -66,6 +66,30 @@ buyerRouter.post("/carConcretSpecial", async (req, res, next) => {
       data: result[0],
       msg: "获取数据成功",
     });
+  } else {
+    res.send({
+      code: -1,
+      msg: "出错了",
+    });
+  }
+});
+/* 通过name获取该标签下的所有分类 ，如：车身分类 ->轿车 SUV 跑车 奥迪 宝马 …… */
+buyerRouter.post("/carCategoryNameAll", async (req, res, next) => {
+  const result = await buyerSql.getCarCategory(req.body.id);
+  if (result.length > 0) {
+    const nameResult=await buyerSql.getCarConcretNameAll(result[0].name)
+    if(nameResult.length>0){
+      res.send({
+        code: 0,
+        data: nameResult,
+        msg: "获取数据成功",
+      });
+    }else{
+      res.send({
+        code: -1,
+        msg: "出错了",
+      });
+    }
   } else {
     res.send({
       code: -1,

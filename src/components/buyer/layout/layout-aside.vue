@@ -1,6 +1,6 @@
 <!--
  * @Date: 2023-12-27 17:40:46
- * @LastEditTime: 2023-12-28 15:37:05
+ * @LastEditTime: 2024-02-04 14:53:00
  * @FilePath: \car-mall-system\src\components\buyer\layout\layout-aside.vue
  * @Description: 买家平台的layout布局中的侧栏内容
 -->
@@ -73,7 +73,9 @@
           v-for="item in carTypeData"
           :key="item.type.id"
         >
-          <buttonHighlight :path="`/category/${item.type.id}`"
+          <buttonHighlight
+            :path="`/category/${item.type.id}`"
+            :active-name="'全部'"
             ><el-icon><component :is="item.type.icon"></component></el-icon
           ></buttonHighlight>
         </el-tooltip>
@@ -88,7 +90,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import useLayoutStore from "../../../store/layout";
-// import useLoginStore from "../../../store/login";
 import avatarPanel from "../../../components/buyer/layout/avatar-panel.vue";
 import sort from "../../../components/buyer/layout/sort.vue";
 import expandFold from "../../../base-ui/expand-fold.vue";
@@ -96,17 +97,20 @@ import avatar from "../../../base-ui/avatar.vue";
 import nickname from "../../../base-ui/nickname.vue";
 import buttonHighlight from "./button-highlight.vue";
 import { useRoute, useRouter } from "vue-router";
+import { getCurrentInstance, ComponentInternalInstance } from "vue";
+import useBuyerLayoutStore from "../../../store/buyer-layout";
+const { proxy }: ComponentInternalInstance = getCurrentInstance();
 const route = useRoute();
 const router = useRouter();
-import { getCurrentInstance, ComponentInternalInstance } from "vue";
-const { proxy }: ComponentInternalInstance = getCurrentInstance();
+const layoutStore = useLayoutStore();
+
 /* 获取侧栏汽车分类数据 */
 let carTypeData = ref<any[]>([]);
+const buyerLayoutStore = useBuyerLayoutStore();
 proxy.$buyerApi.layout.getCarType().then((res) => {
   carTypeData.value = res.data;
 });
-const layoutStore = useLayoutStore();
-// const loginStore = useLoginStore();
+
 </script>
 
 <style scoped lang="scss">

@@ -16,9 +16,4 @@ export namespace buyer {
       id: number;
     }
   }
-  export namespace concret {
-    export interface getCarConcretType {
-      id: number;
-    }
-  }
 }
