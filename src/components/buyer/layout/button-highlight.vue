@@ -1,6 +1,6 @@
 <!--
  * @Date: 2023-12-28 15:25:41
- * @LastEditTime: 2024-02-04 14:41:43
+ * @LastEditTime: 2024-02-05 10:35:29
  * @FilePath: \car-mall-system\src\components\buyer\layout\button-highlight.vue
  * @Description: 侧栏页面中点击会跳转路由的带icon的按钮，为当前路由时显示高亮
 -->
@@ -22,6 +22,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import useBuyerLayoutStore from "../../../store/buyer-layout";
 interface IProps {
   path: string;
   isSmall?: boolean;
@@ -37,31 +38,40 @@ const props = withDefaults(defineProps<IProps>(), {
 
 const route = useRoute();
 const router = useRouter();
+const buyerLayoutStore = useBuyerLayoutStore()
 
-import useBuyerLayoutStore from "../../../store/buyer-layout";
-const buyerLayoutStore = useBuyerLayoutStore();
 const light = computed(() => {
-  if (props.activeName === "全部") {
-    return props.path.split("/")[2] === route.path.split("/")[2]
-      ? "primary"
-      : "";
+  if (props.path.includes("/category/") && route.path.includes("/category/")) {
+    if (props.activeName === "全部") {
+      return props.path.split("/")[2][0] === route.path.split("/")[2][0]
+        ? "primary"
+        : "";
+    } else {
+      return props.path.split("/")[2][0] === route.path.split("/")[2][0] &&
+        props.activeName === buyerLayoutStore.activeName
+        ? "primary"
+        : "";
+    }
   } else {
-    return props.path.split("/")[2] === route.path.split("/")[2] &&
-      props.activeName === buyerLayoutStore.activeName
-      ? "primary"
-      : "";
+    return props.path === route.path ? "primary" : "";
   }
 });
+
 const text = computed(() => {
-  if (props.activeName === "全部") {
-    return !(props.path.split("/")[2] === route.path.split("/")[2]);
+  if (props.path.includes("/category/") && route.path.includes("/category/")) {
+    if (props.activeName === "全部") {
+      return !(props.path.split("/")[2][0] === route.path.split("/")[2][0]);
+    } else {
+      return !(
+        props.path.split("/")[2][0] === route.path.split("/")[2][0] &&
+        props.activeName === buyerLayoutStore.activeName
+      );
+    }
   } else {
-    return !(
-      props.path.split("/")[2] === route.path.split("/")[2] &&
-      props.activeName === buyerLayoutStore.activeName
-    );
+    return !(props.path === route.path);
   }
 });
+
 </script>
 
 <style scoped lang="scss">
