@@ -32,27 +32,27 @@ const useLoginStore = defineStore(
       account?: string;
       id?: number;
       role?: string;
-      gender?: string 
-      introduction?:string
-      password?:string
+      gender?: string;
+      introduction?: string;
+      password?: string;
     }>({});
-      
+
     // let isAuthenticated=ref<boolean>(false)
 
-    function SET_ROLE(roleData = "") {
+    const SET_ROLE = (roleData = "") => {
       role.value = roleData;
       localStorage.setItem("role", roleData);
-    }
-    function SET_TOKEN(tokenData = "") {
+    };
+    const SET_TOKEN = (tokenData = "") => {
       token.value = tokenData;
       localStorage.setItem("token", tokenData);
-    }
-    function SET_USERINFO(userinfoData = {}) {
+    };
+    const SET_USERINFO = (userinfoData = {}) => {
       userInfo.value = userinfoData;
       localStorage.setItem("userInfo", JSON.stringify(userinfoData));
-    }
+    };
     // 设置是否通过验证
-    function isAuthenticated() {
+    const isAuthenticated = () => {
       let flag =
         localStorage.getItem("token") &&
         localStorage.getItem("role") &&
@@ -61,12 +61,12 @@ const useLoginStore = defineStore(
           : false;
       localStorage.setItem("isAuthenticated", JSON.stringify(flag));
       return flag;
-    }
+    };
 
     let myRoutes = ref<RouteRecordRaw[]>(routes);
 
     //登录成功时，TODO:
-    function SET_ROUTES() {
+    const SET_ROUTES = () => {
       let addRoutes: RouteRecordRaw[] = [];
       if (role.value === "buyer") {
         addRoutes = userRoutes;
@@ -95,9 +95,9 @@ const useLoginStore = defineStore(
       return new Promise((resolve, reject) => {
         resolve(myRoutes.value);
       });
-    }
+    };
     /* 重置路由 */
-    function RESET_ROUTES() {
+    const RESET_ROUTES = () => {
       const currentRoutes = router.getRoutes();
       currentRoutes.forEach((route) => {
         if (
@@ -110,15 +110,15 @@ const useLoginStore = defineStore(
           router.removeRoute(route.name as string);
         }
       });
-    }
+    };
     //清空缓存
-    function CLEAR_STORAGE() {
+    const CLEAR_STORAGE = () => {
       SET_ROLE();
       SET_TOKEN();
       SET_USERINFO();
       // SET_AUTHENTICATED()
       RESET_ROUTES();
-    }
+    };
     /*  function REMOVE_ROLE(){
       role.value=''
       localStorage.removeItem('role')
@@ -127,7 +127,7 @@ const useLoginStore = defineStore(
       token.value=''
       localStorage.removeItem('token')
     } */
-    async function loginAction(params) {
+    const loginAction = async (params) => {
       const res = await userApi.login(params);
       if (res.code === 0) {
         router.replace("/home");
@@ -137,9 +137,9 @@ const useLoginStore = defineStore(
         SET_USERINFO(res.data.userInfo);
         SET_ROUTES();
       }
-    }
+    };
     /* 退出登录 */
-    function loginOut() {
+    const loginOut = () => {
       localStorage.clear();
       ElMessageBox.confirm("是否退出登录?", "Warning", {
         confirmButtonText: "确定",
@@ -159,7 +159,7 @@ const useLoginStore = defineStore(
             message: "取消退出",
           });
         });
-    }
+    };
     return {
       role,
       token,

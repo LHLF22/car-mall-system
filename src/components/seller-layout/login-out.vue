@@ -1,12 +1,12 @@
 <template>
   <div class="login-out fl">
     <div class="p20">
-      <avatar/>
+      <avatar />
     </div>
 
     <el-dropdown trigger="click" @command="handleCommand">
       <div class="fl">
-        <nickname :show-tooltip="true"/>
+        <nickname :show-tooltip="true" />
         <el-icon>
           <arrow-down />
         </el-icon>
@@ -34,16 +34,16 @@ import { ArrowDown, House, Close } from "@element-plus/icons-vue";
 import useLoginStore from "../../store/login";
 import avatar from "../../base-ui/avatar.vue";
 import nickname from "../../base-ui/nickname.vue";
-import {useRouter} from 'vue-router'
-const router=useRouter()
+import { useRouter } from "vue-router";
+const router = useRouter();
 const loginStore = useLoginStore();
-function handleCommand(command: string) {
+const handleCommand = (command: string) => {
   if (command === "a") {
-    router.push('/person')
+    router.push("/person");
   } else if (command === "b") {
     loginStore.loginOut();
   }
-}
+};
 </script>
 
 <style scoped lang="scss"></style>

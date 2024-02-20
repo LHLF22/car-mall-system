@@ -1,6 +1,6 @@
 /*
  * @Date: 2023-12-05 16:17:11
- * @LastEditTime: 2024-01-04 14:55:57
+ * @LastEditTime: 2024-02-05 11:44:52
  * @FilePath: \car-mall-system\src\router\index.ts
  * @Description:
  */
@@ -73,17 +73,17 @@ export const userRoutes: Array<RouteRecordRaw> = [
         },
         component: buyer.Person,
       },
-      {
-        name: "concret",
-        path: "/concret/:id",
-        meta: {
-          title: "具体类型",
-        },
-        component: buyer.Concret,
-      },
+      // {
+      //   name: "concret",
+      //   path: "/concret/:id",
+      //   meta: {
+      //     title: "具体类型",
+      //   },
+      //   component: buyer.Concret,
+      // },
       {
         name: "category",
-        path: "/category/:id",
+        path: "/category",
         meta: {
           title: "具体分类",
         },

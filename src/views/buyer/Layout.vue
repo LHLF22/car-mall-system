@@ -1,6 +1,6 @@
 <!--
  * @Date: 2023-12-27 12:00:38
- * @LastEditTime: 2023-12-28 16:22:20
+ * @LastEditTime: 2024-02-05 15:44:05
  * @FilePath: \car-mall-system\src\views\buyer\Layout.vue
  * @Description: 买家平台的layout布局
 -->
@@ -37,11 +37,16 @@ const layoutStore = useLayoutStore();
 .el-container.wrapper {
   height: 100vh;
 }
+
 .el-aside {
   border-right: 1px solid #ccc;
   padding: 25px 15px;
   overflow: visible;
   background-color: var(--el-color-error-light-8);
+  height: 100vh;
+  overflow-y: auto;
+  @include scrollbar();
+  
 }
 .el-main {
   height: 100vh;

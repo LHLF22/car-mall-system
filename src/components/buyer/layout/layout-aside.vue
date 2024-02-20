@@ -1,6 +1,6 @@
 <!--
  * @Date: 2023-12-27 17:40:46
- * @LastEditTime: 2024-02-04 14:53:00
+ * @LastEditTime: 2024-02-05 14:21:32
  * @FilePath: \car-mall-system\src\components\buyer\layout\layout-aside.vue
  * @Description: 买家平台的layout布局中的侧栏内容
 -->
@@ -60,7 +60,7 @@
       <div v-if="!layoutStore.isOpen">
         <sort
           :data="item"
-          v-for="item in carTypeData"
+          v-for="item in buyerLayoutStore.carTypeData"
           :key="item.type.id"
         ></sort>
       </div>
@@ -70,13 +70,10 @@
           :content="item.type.tag"
           placement="bottom"
           :hide-after="0"
-          v-for="item in carTypeData"
+          v-for="item in buyerLayoutStore.carTypeData"
           :key="item.type.id"
         >
-          <buttonHighlight
-            :path="`/category/${item.type.id}?name=全部`"
-            :active-name="'全部'"
-            ><el-icon><component :is="item.type.icon"></component></el-icon
+          <buttonHighlight :button-name="item.type.tag"><el-icon><component :is="item.type.icon"></component></el-icon
           ></buttonHighlight>
         </el-tooltip>
       </div>
@@ -103,12 +100,10 @@ const { proxy }: ComponentInternalInstance = getCurrentInstance();
 const route = useRoute();
 const router = useRouter();
 const layoutStore = useLayoutStore();
-
+const buyerLayoutStore=useBuyerLayoutStore()
 /* 获取侧栏汽车分类数据 */
-let carTypeData = ref<any[]>([]);
-const buyerLayoutStore = useBuyerLayoutStore();
 proxy.$buyerApi.layout.getCarType().then((res) => {
-  carTypeData.value = res.data;
+  buyerLayoutStore.changeCarTypeData(res.data)
 });
 
 </script>

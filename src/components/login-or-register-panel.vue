@@ -1,6 +1,6 @@
 <!--
  * @Date: 2023-12-08 16:09:45
- * @LastEditTime: 2023-12-28 15:20:39
+ * @LastEditTime: 2024-02-05 14:34:12
  * @FilePath: \car-mall-system\src\components\login-or-register-panel.vue
  * @Description: 
  
@@ -198,7 +198,7 @@ const registerFormRule = reactive<FormRules<typeof registerForm>>({
   code: [{ required: true, validator: validateCode, trigger: "blur" }],
 });
 const loginStore = useLoginStore();
-function handleSubmit() {
+const handleSubmit = () => {
   if (props.activeTab === "login") {
     loginFormRef.value.validate((valid) => {
       if (valid) {
@@ -238,12 +238,12 @@ function handleSubmit() {
       }
     });
   }
-}
+};
 
 /* 获取手机验证码 */
 const isFetching = ref(false);
 const { countdown, isCounting, startCountdown, stopCountdown } = useCountdown();
-async function handleGetCode() {
+const handleGetCode = async () => {
   registerFormRef.value.validateField("phone", async (valid) => {
     if (valid) {
       isFetching.value = true;
@@ -259,14 +259,14 @@ async function handleGetCode() {
       ElMessage.error("请检查表单输入是否合法！");
     }
   });
-}
+};
 
 /* 切换tab时清空注册tab的检验剂数据 */
-function clearRegisterForm() {
+const clearRegisterForm=()=> {
   registerFormRef.value.resetFields();
 }
 /* 切换tab时清空登录tab的检验剂数据 */
-function clearLoginForm() {
+const clearLoginForm=()=> {
   loginFormRef.value.resetFields();
 }
 defineExpose({

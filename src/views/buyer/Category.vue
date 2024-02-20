@@ -1,6 +1,6 @@
 <!--
  * @Date: 2023-12-28 14:48:06
- * @LastEditTime: 2024-02-04 15:14:28
+ * @LastEditTime: 2024-02-05 16:23:06
  * @FilePath: \car-mall-system\src\views\buyer\Category.vue
  * @Description: 编写 次要分类标签页 的页面
 -->
@@ -12,10 +12,8 @@
       </template>
       <template #desc> haha </template>
     </HeaderSecond> -->
-    <el-tabs
-      
+    <!-- <el-tabs
       v-model="buyerLayoutStore.activeName"
-      @tab-change="(name) => buyerLayoutStore.changeActiveName(name)"
     >
       <el-tab-pane
         v-for="item in categories"
@@ -24,7 +22,7 @@
         :name="item.name"
         >{{ item.name }}</el-tab-pane
       >
-    </el-tabs>
+    </el-tabs> -->
   </div>
 </template>
 
@@ -39,21 +37,20 @@ const route = useRoute();
 const buyerLayoutStore = useBuyerLayoutStore();
 
 //获取页面的主要分类：车身类型
-const title = ref<string>("");
+/* const title = ref<string>("");
 proxy.$buyerApi.category
   .getCarCategory({ id: parseInt(route.params.id as string) })
   .then((res) => {
     title.value = res.data.name;
-  });
+  }); */
 
 //获取主要分类下的次要分类
-const categories = ref<any[]>([]);
+/* const categories = ref<any[]>([]);
 proxy.$buyerApi.category
   .getCategoryNameAll({ id: parseInt(route.params.id as string) })
   .then((res) => {
     categories.value = res.data;
-    // categories.value.unshift({ id: -1, name: "全部" });
-  });
+  }); */
 
 
 </script>

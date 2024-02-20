@@ -15,7 +15,7 @@ const useLayoutStore = defineStore(
   () => {
     /* 控制侧栏菜单的开关 */
     const isOpen = ref(false); //false为折叠
-    function changeOpen() {
+    const changeOpen=()=>{
       isOpen.value = !isOpen.value;
     }
 
@@ -28,12 +28,12 @@ const useLayoutStore = defineStore(
     /* 面包屑 */
     const myBread = ref<any[]>([]);
 
-    function initBread() {
+    const initBread=() =>{
       if (myBread.value.length !== 0) return;
       myBread.value = router.getRoutes().filter((el) => el.name === "home");
     }
     //添加面包屑
-    function addBread(bread: any) {
+    const addBread=(bread: any)=> {
       // console.log(myBread.value);
       if (myBread.value.map((el) => el.name).includes(bread.name)) {
         return;
@@ -43,7 +43,7 @@ const useLayoutStore = defineStore(
     }
     const router = useRouter();
     //移除面包屑
-    function removeBread(bread: any) {
+    const removeBread=(bread: any)=> {
       const index = myBread.value.indexOf(bread);
       if (index !== -1) {
         myBread.value.splice(index, 1);

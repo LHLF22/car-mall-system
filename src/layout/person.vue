@@ -76,7 +76,7 @@ const account = ref<string>(userInfo.value.account);
 const password = ref<string>(userInfo.value.password);
 const gender = ref<string>(userInfo.value.gender);
 const introduction = ref(userInfo.value.introduction);
-async function infoChange(item, data) {
+const infoChange = async (item, data) => {
   console.log(item, data, "data");
   if (item === "account") {
     const res = await proxy.$userApi.editAccount({
@@ -105,7 +105,7 @@ async function infoChange(item, data) {
       ElMessage.error(res.msg);
       password.value = userInfo.value.account;
     }
-  }else if (item === "gender") {
+  } else if (item === "gender") {
     const res = await proxy.$userApi.editGender({
       gender: data,
       id: userInfo.value.id,
@@ -118,13 +118,16 @@ async function infoChange(item, data) {
       ElMessage.error(res.msg);
       gender.value = userInfo.value.gender;
     }
-  }else if (item === "introduction") {
+  } else if (item === "introduction") {
     const res = await proxy.$userApi.editIntroduction({
       introduction: data,
       id: userInfo.value.id,
     });
     if (res.code === 0) {
-      const original = { ...userInfo.value, introduction: res.data.introduction };
+      const original = {
+        ...userInfo.value,
+        introduction: res.data.introduction,
+      };
       loginStore.SET_USERINFO(original);
       ElMessage.success(res.msg);
     } else {
@@ -132,7 +135,7 @@ async function infoChange(item, data) {
       introduction.value = userInfo.value.introduction;
     }
   }
-}
+};
 </script>
 
 <style scoped lang="scss">

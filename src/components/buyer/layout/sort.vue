@@ -1,38 +1,32 @@
 <!--
  * @Date: 2023-12-26 15:15:42
- * @LastEditTime: 2024-02-05 11:12:23
+ * @LastEditTime: 2024-02-05 14:22:37
  * @FilePath: \car-mall-system\src\components\buyer\layout\sort.vue
  * @Description: 侧栏汽车分类组件
 -->
 <template>
   <div class="sort">
-    <div
-      @click="
-        router.push(`/category/${props.data.type.id}?name=全部`),
-          buyerLayoutStore.changeActiveName('全部')
-      "
-      class="flSB"
-    >
+    <div class="flSB">
       <div>
         <buttonHighlight
           :is-small-margin="true"
           :is-small="true"
-          :path="`/category/${props.data.type.id}?name=全部`"
-          :active-name="'全部'"
+          :button-name="props.data.type.tag"
         >
           <el-icon><component :is="props.data.type.icon"></component></el-icon>
         </buttonHighlight>
         <el-text type="primary" size="small">{{ props.data.type.tag }}</el-text>
       </div>
-      <el-icon><ArrowRightBold /></el-icon>
+      <buttonHighlight :button-name="props.data.type.tag"
+        ><el-icon><ArrowRightBold /></el-icon
+      ></buttonHighlight>
     </div>
     <div class="flex">
       <div v-for="(item, index) in props.data.list" :key="item.id">
         <buttonHighlight
-          :path="`/category/${props.data.type.id}?name=${item.name}`"
-          :active-name="item.name"
           :is-small-margin="true"
           :is-small="true"
+          :button-name="item.name"
           >{{ item.name }}</buttonHighlight
         >
         <span
@@ -41,7 +35,6 @@
           style="color: rgb(209, 200, 200)"
           >|</span
         >
-        <!-- <el-divider direction="vertical" border-style="dashed" v-if="index !== props.data.list.length - 1"/> -->
       </div>
     </div>
   </div>
