@@ -1,6 +1,6 @@
 /*
  * @Date: 2023-12-05 14:35:51
- * @LastEditTime: 2023-12-28 14:12:39
+ * @LastEditTime: 2024-02-22 16:06:46
  * @FilePath: \car-mall-system\src\main.ts
  * @Description:
  * 1.数据持久化
@@ -45,8 +45,10 @@ app.config.globalProperties.$http = {
 } */
 import buyerApi from "./api/buyer";
 import userApi from "./api/user";
+import sellerApi from "./api/seller";
 app.config.globalProperties.$buyerApi = buyerApi;
 app.config.globalProperties.$userApi = userApi;
+app.config.globalProperties.$sellerApi = sellerApi;
 app.use(ElementPlus).use(store).use(router).mount("#app");
 
 // size 用于设置表单组件的默认尺寸，zIndex 用于设置弹出组件的层级，zIndex 的默认值为 2000。

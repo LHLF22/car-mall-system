@@ -1,6 +1,6 @@
 /*
  * @Date: 2023-12-19 16:48:38
- * @LastEditTime: 2024-02-20 10:46:21
+ * @LastEditTime: 2024-02-28 16:00:40
  * @FilePath: \car-mall-system\src\store\buyer-layout.ts
  * @Description:
  */
@@ -11,10 +11,10 @@ interface pageType {
   path: string;
   title: string;
 }
-interface tagsType {
-  tag: string[];
-  name: string[];
-}
+// interface tagsType {
+//   tag: string[];
+//   name: string[];
+// }
 const useBuyerLayoutStore = defineStore(
   "buyerLayoutStore",
   () => {
@@ -28,28 +28,23 @@ const useBuyerLayoutStore = defineStore(
     const changeCurrentPage = (page: pageType) => {
       currentPage = page;
     };
-
-    // let oldTags=ref<Array<{type?:string,tag?:string}>>([])
-    let oldTags = ref<tagsType>({ tag: ['1'], name: ['2'] });
-
-    const deleteTags = (type, index) => {
-      oldTags.value[type].splice(index, 1);
-      console.log(oldTags.value, "delete oldTags");
+    let tags = ref<string[]>([]);
+    const deleteTag = (index) => {
+      tags.value.splice(index, 1);
+      // console.log(tags.value,'delete')
     };
-    const addTags = (type, data) => {
-      oldTags.value[type].push(data);
-      console.log(oldTags.value, "add oldTags");
+    const addTag = (data) => {
+      tags.value.push(data);
+      // console.log(tags.value,'add')
     };
     return {
       carTypeData,
       changeCarTypeData,
       currentPage,
       changeCurrentPage,
-      oldTags,
-      addTags,
-      deleteTags,
-      // activeName,
-      // changeActiveName,
+      tags,
+      deleteTag,
+      addTag,
     };
   },
   { persist: true } // 启用持久化

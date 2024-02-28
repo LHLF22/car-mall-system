@@ -1,6 +1,6 @@
 /*
  * @Date: 2023-12-05 16:17:11
- * @LastEditTime: 2024-02-05 11:44:52
+ * @LastEditTime: 2024-02-28 10:54:28
  * @FilePath: \car-mall-system\src\router\index.ts
  * @Description:
  */
@@ -89,6 +89,14 @@ export const userRoutes: Array<RouteRecordRaw> = [
         },
         component: buyer.Category,
       },
+      {
+        name: "detail",
+        path: "/detail",
+        meta: {
+          title: "详情页",
+        },
+        component: buyer.CarDetail,
+      },
     ],
   },
 ];
@@ -104,23 +112,87 @@ export const sellerRoutes: Array<RouteRecordRaw> = [
         component: seller.Home,
         meta: { icon: "House", title: "首页" },
       },
+      // {
+      //   name: "detail",
+      //   path: "/detail",
+      //   meta: {
+      //     title: "详情",
+      //     icon: "Document",
+      //   },
+      //   component: seller.Detail,
+      // },
+      // {
+      //   name: "person",
+      //   path: "/person",
+      //   meta: {
+      //     title: "个人中心",
+      //     icon: "Document",
+      //   },
+      //   component: seller.Person,
+      // },
       {
-        name: "detail",
-        path: "/detail",
+        path: " ",
+        name: "shop-list",
+        component: seller.Shop,
         meta: {
-          title: "详情",
+          title: "商品管理",
           icon: "Document",
         },
-        component: seller.Detail,
+        children: [
+          {
+            name: "shop-list",
+            path: "/shop-list",
+            meta: {
+              title: "商品列表",
+            },
+            component: seller.ShopList,
+          },
+          // {
+          //   name:'add-car',
+          //   path:'/add-car',
+          //   meta:{
+          //     title:'添加商品'
+          //   },
+          //   component:seller.AddCar
+
+          // }
+        ],
       },
       {
-        name: "person",
-        path: "/person",
+        path: " ",
+        name: "order-list",
+        component: seller.Order,
         meta: {
-          title: "个人中心",
+          title: "订单管理",
           icon: "Document",
         },
-        component: seller.Person,
+        children: [
+          {
+            name: "order-list",
+            path: "/order-list",
+            meta: {
+              title: "订单列表",
+            },
+            component: seller.OrderList,
+          },
+          {
+            name: "after-sale",
+            path: "/after-sale",
+            meta: {
+              title: "售后管理",
+            },
+            component: seller.AfterSale,
+          },
+        ],
+      },
+      {
+        name: "store-manage",
+        path: "/store-manage",
+        meta: {
+          title: "店铺管理",
+          icon: "Document",
+        },
+        component: seller.StoreManage,
       },
     ],
   },
@@ -140,15 +212,15 @@ export const adminRoutes: Array<RouteRecordRaw> = [
         },
         component: admin.Home,
       },
-      {
-        name: "person",
-        path: "/person",
-        meta: {
-          title: "个人中心",
-          icon: "Document",
-        },
-        component: admin.Person,
-      },
+      // {
+      //   name: "person",
+      //   path: "/person",
+      //   meta: {
+      //     title: "个人中心",
+      //     icon: "Document",
+      //   },
+      //   component: admin.Person,
+      // },
     ],
   },
 ];

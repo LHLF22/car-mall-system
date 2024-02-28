@@ -36,3 +36,10 @@ declare module "@vue/runtime-core" {
     $userApi: typeof userApi;
   }
 }
+
+import sellerApi from "./api/seller";
+declare module "@vue/runtime-core" {
+  interface ComponentCustomProperties {
+    $sellerApi: typeof sellerApi;
+  }
+}

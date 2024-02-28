@@ -1,6 +1,6 @@
 <!--
  * @Date: 2023-12-19 15:16:20
- * @LastEditTime: 2024-01-04 15:04:32
+ * @LastEditTime: 2024-02-21 11:49:49
  * @FilePath: \car-mall-system\src\layout\index.vue
  * @Description: 
 -->
@@ -22,17 +22,18 @@
       <el-container>
         <el-header class="breadcrumb f">
           <!-- 面包屑 -->
-          <breadcrumb/>
+          <breadcrumb />
         </el-header>
         <el-main>
           <!-- 中间的 嵌套路由-->
-          <router-view v-slot="{ Component, route }">
+          <!-- <router-view v-slot="{ Component, route }">
             <transition name="fade-transform" mode="out-in">
               <keep-alive>
                 <component :is="Component" :key="route.path" />
               </keep-alive>
             </transition>
-          </router-view>
+          </router-view> -->
+          <router-view></router-view>
         </el-main>
       </el-container>
     </el-container>
@@ -76,6 +77,5 @@ const layoutStore = useLayoutStore();
 .el-header.breadcrumb {
   height: 40px;
 }
-
 </style>
 <style lang="scss"></style>

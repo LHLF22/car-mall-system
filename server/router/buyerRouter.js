@@ -97,4 +97,20 @@ buyerRouter.post("/carCategoryNameAll", async (req, res, next) => {
     });
   }
 });
+
+buyerRouter.post('/carSpecial',async (req, res, next) => {
+  const result=await buyerSql.getCarSpecial()
+  if(result.length>0){
+    res.send({
+      code:0,
+      data:result,
+      msg:'获取数据成功'
+    })
+  }else{
+    res.send({
+      code:-1,
+      msg:'获取数据失败'
+    })
+  }
+})
 module.exports = buyerRouter;

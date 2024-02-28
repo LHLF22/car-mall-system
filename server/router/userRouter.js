@@ -1,6 +1,6 @@
 /*
  * @Date: 2023-12-13 10:02:14
- * @LastEditTime: 2024-01-02 16:48:34
+ * @LastEditTime: 2024-02-28 14:44:03
  * @FilePath: \car-mall-system\server\router\userRouter.js
  * @Description: 注册、登录
  */
@@ -84,7 +84,8 @@ userRouter.post("/login", async (req, res, next) => {
       }
     );
     // console.log(passwordRes, "passwordRes");
-    const { id, phone, account, role, gender, introduction,password } = passwordRes[0];
+    const { id, phone, account, role, gender, introduction, password } =
+      passwordRes[0];
     res.send({
       code: 0,
       msg: "登录成功",
@@ -141,16 +142,43 @@ userRouter.post("/register", async (req, res, next) => {
       if (verifyCodeRes.length > 0) {
         const register = await userSql.register({ phone, password, role });
         if (register.affectedRows === 1) {
-          res.send({
-            code: 0,
-            //查一下注册成功需要返回什么TODO:
-            /* data:{
+          //若为seller则分配新店铺
+          if (role === "seller") {
+            const distributionRes = await userSql.distributionStore(
+              register.insertId
+            );
+            if (distributionRes.affectedRows === 1) {
+              res.send({
+                code: 0,
+                msg: "注册成功1",
+              });
+            } else {
+              //若店铺创建失败，连同刚刚注册的seller一同删除
+              const deleteRes = await userSql.deleteUser(register.insertId);
+              if (deleteRes.affectedRows === 1) {
+                res.send({
+                  code: -1,
+                  msg: "注册失败",
+                });
+              } else {
+                res.send({
+                  code: -1,
+                  msg: "出错啦",
+                });
+              }
+            }
+          } else {
+            res.send({
+              code: 0,
+              //查一下注册成功需要返回什么TODO:
+              /* data:{
               id:register.insertId,
               phone,
               role,
             }, */
-            msg: "注册成功",
-          });
+              msg: "注册成功",
+            });
+          }
         } else {
           res.send({
             code: -1,
@@ -249,61 +277,61 @@ userRouter.post("/username", async (req, res, next) => {
 userRouter.post("/password", async (req, res, next) => {
   const { password, id } = req.body;
   const result = await userSql.editPassword({ password, id });
-    if (result.affectedRows === 1) {
-      // console.log(result,'result')
-      res.send({
-        code: 0,
-        data: {
-          password,
-        },
-        msg: "修改密码成功",
-      });
-    } else {
-      res.send({
-        code: -1,
-        msg: "出错啦",
-      });
-    }
+  if (result.affectedRows === 1) {
+    // console.log(result,'result')
+    res.send({
+      code: 0,
+      data: {
+        password,
+      },
+      msg: "修改密码成功",
+    });
+  } else {
+    res.send({
+      code: -1,
+      msg: "出错啦",
+    });
+  }
 });
 /* 修改性别 */
 userRouter.post("/gender", async (req, res, next) => {
   const { gender, id } = req.body;
   const result = await userSql.editGender({ gender, id });
-    if (result.affectedRows === 1) {
-      // console.log(result,'result')
-      res.send({
-        code: 0,
-        data: {
-          gender,
-        },
-        msg: "修改密码成功",
-      });
-    } else {
-      res.send({
-        code: -1,
-        msg: "出错啦",
-      });
-    }
+  if (result.affectedRows === 1) {
+    // console.log(result,'result')
+    res.send({
+      code: 0,
+      data: {
+        gender,
+      },
+      msg: "修改密码成功",
+    });
+  } else {
+    res.send({
+      code: -1,
+      msg: "出错啦",
+    });
+  }
 });
 /* 修改个人简介 */
 userRouter.post("/introduction", async (req, res, next) => {
   const { introduction, id } = req.body;
   const result = await userSql.editIntroduction({ introduction, id });
-    if (result.affectedRows === 1) {
-      // console.log(result,'result')
-      res.send({
-        code: 0,
-        data: {
-          introduction,
-        },
-        msg: "修改密码成功",
-      });
-    } else {
-      res.send({
-        code: -1,
-        msg: "出错啦",
-      });
-    }
+  if (result.affectedRows === 1) {
+    // console.log(result,'result')
+    res.send({
+      code: 0,
+      data: {
+        introduction,
+      },
+      msg: "修改密码成功",
+    });
+  } else {
+    res.send({
+      code: -1,
+      msg: "出错啦",
+    });
+  }
 });
 // 将路由对象向外导出
 module.exports = userRouter;

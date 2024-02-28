@@ -1,6 +1,6 @@
 /*
  * @Date: 2023-12-13 15:40:01
- * @LastEditTime: 2024-01-02 16:49:03
+ * @LastEditTime: 2024-02-28 14:22:15
  * @FilePath: \car-mall-system\server\db\user-sql.js
  * @Description:
  */
@@ -157,6 +157,28 @@ const user = {
       "insert into users (phone,password,role,addtime) values (?,?,?,CURRENT_TIMESTAMP)";
     return new Promise((resolve, reject) => {
       connection.query(db, [phone, password, role], (err, result) => {
+        if (err) {
+          reject(err);
+        }
+        resolve(result);
+      });
+    });
+  },
+  distributionStore(id) {
+    const db = "insert into store (sellerId) values (?)";
+    return new Promise((resolve, reject) => {
+      connection.query(db, [id], (err, result) => {
+        if (err) {
+          reject(err);
+        }
+        resolve(result);
+      });
+    });
+  },
+  deleteUser(id) {
+    const db = "delete from users where id =?";
+    return new Promise((resolve, reject) => {
+      connection.query(db, [id], (err, result) => {
         if (err) {
           reject(err);
         }

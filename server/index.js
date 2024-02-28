@@ -1,6 +1,6 @@
 /*
  * @Date: 2023-12-13 09:45:20
- * @LastEditTime: 2023-12-28 15:22:32
+ * @LastEditTime: 2024-02-23 16:25:25
  * @FilePath: \car-mall-system\server\index.js
  * @Description:
  */
@@ -15,6 +15,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 /* 设置静态目录 */
 app.use("/apidoc", express.static("apidoc"));
+app.use(express.static('public'));
 /* 设置端口 */
 const port = 3000;
 // 导入配置文件
@@ -26,15 +27,19 @@ app.use(
   expressJWT({ secret: config.jwtSecretKey }).unless({
     path: [/^\/user\/login/,
     /^\/user\/register/,
-    /^\/user\/code/],
+    /^\/user\/code/,
+    /^\/images/,
+  ],
   })
 );
 // 导入并注册用户路由模块
 const userRouter = require("./router/userRouter");
 const buyerRouter = require("./router/buyerRouter");
+const sellerRouter = require("./router/sellerRouter");
 //挂载路由并设置路由前缀api
 app.use("/user", userRouter);
 app.use("/buyer", buyerRouter);
+app.use("/seller", sellerRouter);
 app.use(function (err, req, res, next) {
   // 省略其它代码...
   // 捕获身份认证失败的错误

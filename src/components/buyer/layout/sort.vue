@@ -1,13 +1,13 @@
 <!--
  * @Date: 2023-12-26 15:15:42
- * @LastEditTime: 2024-02-05 14:22:37
+ * @LastEditTime: 2024-02-20 14:59:02
  * @FilePath: \car-mall-system\src\components\buyer\layout\sort.vue
  * @Description: 侧栏汽车分类组件
 -->
 <template>
   <div class="sort">
     <div class="flSB">
-      <div>
+       <div>
         <buttonHighlight
           :is-small-margin="true"
           :is-small="true"
@@ -17,9 +17,6 @@
         </buttonHighlight>
         <el-text type="primary" size="small">{{ props.data.type.tag }}</el-text>
       </div>
-      <buttonHighlight :button-name="props.data.type.tag"
-        ><el-icon><ArrowRightBold /></el-icon
-      ></buttonHighlight>
     </div>
     <div class="flex">
       <div v-for="(item, index) in props.data.list" :key="item.id">

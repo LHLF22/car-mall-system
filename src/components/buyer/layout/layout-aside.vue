@@ -1,6 +1,6 @@
 <!--
  * @Date: 2023-12-27 17:40:46
- * @LastEditTime: 2024-02-05 14:21:32
+ * @LastEditTime: 2024-02-28 17:22:25
  * @FilePath: \car-mall-system\src\components\buyer\layout\layout-aside.vue
  * @Description: 买家平台的layout布局中的侧栏内容
 -->
@@ -73,8 +73,9 @@
           v-for="item in buyerLayoutStore.carTypeData"
           :key="item.type.id"
         >
-          <buttonHighlight :button-name="item.type.tag"><el-icon><component :is="item.type.icon"></component></el-icon
+           <buttonHighlight :button-name="item.type.tag"><el-icon><component :is="item.type.icon"></component></el-icon
           ></buttonHighlight>
+         
         </el-tooltip>
       </div>
     </transition>
@@ -100,12 +101,11 @@ const { proxy }: ComponentInternalInstance = getCurrentInstance();
 const route = useRoute();
 const router = useRouter();
 const layoutStore = useLayoutStore();
-const buyerLayoutStore=useBuyerLayoutStore()
+const buyerLayoutStore = useBuyerLayoutStore();
 /* 获取侧栏汽车分类数据 */
 proxy.$buyerApi.layout.getCarType().then((res) => {
-  buyerLayoutStore.changeCarTypeData(res.data)
+  buyerLayoutStore.changeCarTypeData(res.data);
 });
-
 </script>
 
 <style scoped lang="scss">

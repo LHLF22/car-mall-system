@@ -1,6 +1,6 @@
 /*
  * @Date: 2023-12-13 15:40:01
- * @LastEditTime: 2024-01-04 16:02:25
+ * @LastEditTime: 2024-02-28 15:37:52
  * @FilePath: \car-mall-system\server\db\buyer-sql.js
  * @Description:
  */
@@ -47,6 +47,10 @@ const buyer = {
   async getCarConcretNameAll(name){
     const db="select * from car_type where tag= ?"
     return await myPromise(db,[name])
+  },
+
+  async getCarSpecial(){
+
   }
 };
 exports = module.exports = buyer;
