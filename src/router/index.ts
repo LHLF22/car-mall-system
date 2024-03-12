@@ -1,6 +1,6 @@
 /*
  * @Date: 2023-12-05 16:17:11
- * @LastEditTime: 2024-02-28 10:54:28
+ * @LastEditTime: 2024-03-12 15:49:41
  * @FilePath: \car-mall-system\src\router\index.ts
  * @Description:
  */
@@ -57,14 +57,14 @@ export const userRoutes: Array<RouteRecordRaw> = [
         },
         component: buyer.Home,
       },
-      {
-        name: "detail",
-        path: "/detail",
-        meta: {
-          title: "详情",
-        },
-        component: buyer.Detail,
-      },
+      // {
+      //   name: "detail",
+      //   path: "/detail",
+      //   meta: {
+      //     title: "详情",
+      //   },
+      //   component: buyer.Detail,
+      // },
       {
         name: "person",
         path: "/person",
@@ -91,11 +91,19 @@ export const userRoutes: Array<RouteRecordRaw> = [
       },
       {
         name: "detail",
-        path: "/detail",
+        path: "/detail/:id",
         meta: {
           title: "详情页",
         },
         component: buyer.CarDetail,
+      },
+      {
+        name: "store",
+        path: "/store/:id",
+        meta: {
+          title: "店铺详情页",
+        },
+        component: buyer.Store,
       },
     ],
   },
@@ -183,6 +191,14 @@ export const sellerRoutes: Array<RouteRecordRaw> = [
             },
             component: seller.AfterSale,
           },
+          {
+            name: "to-do-list",
+            path: "/to-do-list",
+            meta: {
+              title: "待办列表",
+            },
+            component: seller.ToDoList,
+          },
         ],
       },
       {
@@ -251,6 +267,7 @@ router.beforeEach(async (to, from, next) => {
       /* 原本我写的是next(to)但会有bug：登录成功后跳转的是404，在浏览器输入/login或/detail才能跳到响应页面，而且每次刷新浏览器都会跳到404，但是浏览器前进后退都可以正常显示
       我改为to.path解决的问题是刷新浏览器后能正常显示，现在还存留一个bug:登录后跳转到的是404 */
       next(to.path);
+      // next({path:'/home'});
     } else {
       next();
     }

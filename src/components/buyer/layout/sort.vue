@@ -1,20 +1,16 @@
 <!--
  * @Date: 2023-12-26 15:15:42
- * @LastEditTime: 2024-02-20 14:59:02
+ * @LastEditTime: 2024-02-28 17:34:57
  * @FilePath: \car-mall-system\src\components\buyer\layout\sort.vue
  * @Description: 侧栏汽车分类组件
 -->
 <template>
   <div class="sort">
     <div class="flSB">
-       <div>
-        <buttonHighlight
-          :is-small-margin="true"
-          :is-small="true"
-          :button-name="props.data.type.tag"
-        >
+      <div>
+        <el-button class="m10" text>
           <el-icon><component :is="props.data.type.icon"></component></el-icon>
-        </buttonHighlight>
+        </el-button>
         <el-text type="primary" size="small">{{ props.data.type.tag }}</el-text>
       </div>
     </div>
@@ -23,7 +19,7 @@
         <buttonHighlight
           :is-small-margin="true"
           :is-small="true"
-          :button-name="item.name"
+          :button-info="{name:item.name,tag:tagFormat(props.data.type.tag)}"
           >{{ item.name }}</buttonHighlight
         >
         <span
@@ -40,6 +36,7 @@
 import buttonHighlight from "./button-highlight.vue";
 import { useRoute, useRouter } from "vue-router";
 import useBuyerLayoutStore from "../../../store/buyer-layout";
+import { tagFormat } from "../../../utils/format";
 interface listType {
   id: number;
   name: string;

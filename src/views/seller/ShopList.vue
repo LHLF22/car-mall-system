@@ -33,8 +33,8 @@
         prop="status"
         label="商品状态"
         :filters="[
-          { text: '上架', value: 1 },
-          { text: '下架', value: 0 },
+          { text: '上架', value:'1' },
+          { text: '下架', value: '0' },
         ]"
         :filter-method="
           (value, row) => {

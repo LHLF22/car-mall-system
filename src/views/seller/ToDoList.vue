@@ -1,17 +1,17 @@
 <!--
  * @Date: 2024-02-20 17:00:16
- * @LastEditTime: 2024-03-10 22:46:42
- * @FilePath: \car-mall-system\src\views\seller\OrderList.vue
+ * @LastEditTime: 2024-03-10 23:35:13
+ * @FilePath: \car-mall-system\src\views\seller\ToDoList.vue
  * @Description: 
 -->
 <template>
   <div>
     <el-table
       row-key="date"
-      :data="sellerLayoutStore.orderTableList"
+      :data="sellerLayoutStore.toDoListTable"
       style="width: 100%"
     >
-      <el-table-column prop="id" label="订单编号" />
+      <el-table-column prop="orderId" label="订单编号" />
       <el-table-column prop="carName" label="商品名称" width="200">
         <template #default="scope">
           <div class="f">
@@ -25,17 +25,6 @@
           </div>
         </template></el-table-column
       >
-      <el-table-column
-        prop="brand"
-        label="品牌"
-        :filters="brandFilter"
-        :filter-method="
-          (value, row) => {
-            return value === row.brand;
-          }
-        "
-        filter-placement="bottom-end"
-      />
 
       <el-table-column
         prop="totalPrice"
@@ -44,12 +33,7 @@
         sortable
       />
       <el-table-column prop="count" label="下单数量" width="110" sortable />
-      <el-table-column
-        prop="createdAt"
-        label="订单创建时间"
-        width="170"
-        sortable
-      />
+      <el-table-column prop="createdAt" label="申请时间" width="170" sortable />
       <el-table-column
         prop="appointmentTime"
         label="预约提车时间"
@@ -88,9 +72,15 @@
       </el-table-column>
       <el-table-column
         prop="afterSaleType"
-        label="退款与售后"
+        label="用户退款与售后"
         width="150"
-        :filters="Array.from(new Set(sellerLayoutStore.orderTableList.map(e=>e.afterSaleType))).map(el=>({text:el,value:el}))"
+        :filters="
+          Array.from(
+            new Set(
+              sellerLayoutStore.toDoListTable.map((e) => e.afterSaleType)
+            )
+          ).map((el) => ({ text: el, value: el }))
+        "
         :filter-method="
           (value, row) => {
             return value === row.afterSaleType;
@@ -101,7 +91,11 @@
       <el-table-column
         prop="isProcessed"
         label="处理退款与售后结果"
-        :filters="Array.from(new Set(sellerLayoutStore.orderTableList.map(e=>e.isProcessed))).map(el=>({text:el,value:el}))"
+        :filters="
+          Array.from(
+            new Set(sellerLayoutStore.orderTableList.map((e) => e.isProcessed))
+          ).map((el) => ({ text: el, value: el }))
+        "
         :filter-method="
           (value, row) => {
             return value === row.isProcessed;
@@ -138,27 +132,111 @@
           >
         </template>
       </el-table-column>
+      <el-table-column prop="desc" label="用户退款与售后原因" width="110" />
       <el-table-column prop="isSuccess" label="商家是否已退款" width="110" />
+      <el-table-column prop="sellerDesc" label="拒绝退款原因" width="110" />
+      <el-table-column label="Operations" width="140">
+        <template #default="scope">
+          <el-button size="small" @click="handleEdit(scope.row)"
+            >操作</el-button
+          >
+        </template>
+      </el-table-column>
     </el-table>
+    <el-dialog
+      class="car-dialog"
+      v-model="dialogFormVisible"
+      title="Shipping address"
+      width="500"
+    >
+      <el-radio-group v-model="isProcessed">
+        <el-radio value="1" label="1">不用用户退货直接退款</el-radio>
+        <el-radio value="2" label="2">用户退货后再退款</el-radio>
+        <el-radio value="3" label="3">拒绝退款</el-radio>
+      </el-radio-group>
+      <el-input
+        v-if="isProcessed === '3'"
+        v-model="sellerDesc"
+        type="textarea"
+        placeholder="拒绝退款原因"
+        :rows="4"
+      />
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="dialogFormVisible = false">Cancel</el-button>
+          <el-button type="primary" @click="confirm"> Confirm </el-button>
+        </div>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch, getCurrentInstance, ComponentInternalInstance } from "vue";
 import type { UploadProps, TableInstance } from "element-plus";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { Plus } from "@element-plus/icons-vue";
 import useSellerLayoutStore from "@/store/seller-layout";
+const { proxy }: ComponentInternalInstance = getCurrentInstance();
 const sellerLayoutStore = useSellerLayoutStore();
-const brandFilter = ref([]);
-sellerLayoutStore.getSellerOrder();
-sellerLayoutStore.orderTableList.forEach((e) => {
-  if (brandFilter.value.map((el) => el.text).includes(e.brand)) {
+sellerLayoutStore.getToDoList();
+const dialogFormVisible = ref(false);
+const isProcessed = ref("2");
+const sellerDesc = ref("");
+const currentRow = ref(null);
+
+const handleEdit = (row) => {
+  dialogFormVisible.value = true;
+  currentRow.value = row;
+};
+const confirm = () => {
+  if (!currentRow.value) return;
+  if (isProcessed.value === "3" && !sellerDesc.value) {
+    ElMessage.error("请填写拒绝退款的原因");
     return;
-  } else {
-    brandFilter.value.push({ text: e.brand, value: e.brand });
   }
-});
+  const params =
+    isProcessed.value === "3"
+      ? {
+          sellerDesc: sellerDesc.value,
+          isProcessed: isProcessed.value,
+          id: currentRow.value.afterSaleId,
+          isSuccess: 0,
+          orderId: currentRow.value.orderId,
+        }
+      : isProcessed.value === "2"
+      ? {
+          sellerDesc: "",
+          isProcessed: isProcessed.value,
+          id: currentRow.value.afterSaleId,
+          isSuccess: 0,
+          orderId: currentRow.value.orderId,
+        }
+      : {
+          sellerDesc: "",
+          isProcessed: isProcessed.value,
+          id: currentRow.value.afterSaleId,
+          isSuccess: 1,
+          orderId: currentRow.value.orderId,
+        };
+
+  proxy.$sellerApi.order.dealAfterSale(params).then((res) => {
+    if (res.code == 0) {
+      ElMessage.success("成功");
+      sellerLayoutStore.getToDoList();
+    } else {
+      ElMessage.error("失败");
+    }
+  });
+};
+watch(
+  () => dialogFormVisible.value,
+  (newVal, oldVal) => {
+    if (!newVal) {
+      currentRow.value = null;
+    }
+  }
+);
 </script>
 
 <style scoped lang="scss">

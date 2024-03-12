@@ -14,6 +14,7 @@ const buyer = {
   // Concret: () => import("@/views/buyer/Concret.vue"),
   Category: () => import("@/views/buyer/Category.vue"),
   CarDetail: () => import("@/views/buyer/CarDetail.vue"),
+  Store: () => import("@/views/buyer/Store.vue"),
 };
 const seller = {
   Home: () => import("@/views/seller/Home.vue"),
@@ -26,6 +27,7 @@ const seller = {
   OrderList: () => import("@/views/seller/OrderList.vue"),
   AfterSale: () => import("@/views/seller/AfterSale.vue"),
   StoreManage: () => import("@/views/seller/StoreManage.vue"),
+  ToDoList:() => import("@/views/seller/ToDoList.vue"),
 };
 const admin = {
   Home: () => import("@/views/admin/Home.vue"),

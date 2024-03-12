@@ -10,7 +10,8 @@
 <template>
   <div class="Login">
     <el-container>
-      <el-aside width="60vw">Aside</el-aside>
+     <!--  <el-aside width="60vw">Aside</el-aside> -->
+     
       <el-main>
         <el-tabs
           v-model="activeName"

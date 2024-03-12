@@ -1,6 +1,6 @@
 <!--
  * @Date: 2023-12-08 16:09:45
- * @LastEditTime: 2024-02-05 14:34:12
+ * @LastEditTime: 2024-02-28 21:45:04
  * @FilePath: \car-mall-system\src\components\login-or-register-panel.vue
  * @Description: 
  
@@ -254,6 +254,7 @@ const handleGetCode = async () => {
       if (res.code !== 0) {
         stopCountdown();
       }
+      ElMessage.success(res.msg)
       isFetching.value = false;
     } else {
       ElMessage.error("请检查表单输入是否合法！");

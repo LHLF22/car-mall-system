@@ -1,6 +1,6 @@
 /*
  * @Date: 2023-12-08 15:08:46
- * @LastEditTime: 2023-12-26 09:32:00
+ * @LastEditTime: 2024-03-11 16:11:42
  * @FilePath: \car-mall-system\src\store\login.ts
  * @Description:
  */
@@ -16,6 +16,8 @@ import {
   router,
 } from "../router";
 import { ref } from "vue";
+import useBuyerLayoutStore from "./buyer-layout";
+import useSellerLayoutStore from "./seller-layout";
 // import useLayoutStore from "./layout";
 // const { proxy }: ComponentInternalInstance = getCurrentInstance();
 
@@ -23,6 +25,8 @@ const useLoginStore = defineStore(
   "login",
   () => {
     const router = useRouter();
+    const buyerLayoutStore = useBuyerLayoutStore();
+    const sellerLayoutStore = useSellerLayoutStore();
     // const layoutStore=useLayoutStore()
     /*  if(getCurrentInstance()){
     } */
@@ -131,11 +135,25 @@ const useLoginStore = defineStore(
       const res = await userApi.login(params);
       if (res.code === 0) {
         router.replace("/home");
+
         // layoutStore.initBread()
         SET_ROLE(res.data.role);
         SET_TOKEN(res.data.token);
         SET_USERINFO(res.data.userInfo);
         SET_ROUTES();
+        if (res.data.role === "buyer") {
+          buyerLayoutStore.tags = [];
+          buyerLayoutStore.getArea();
+          buyerLayoutStore.getShopCart();
+          buyerLayoutStore.getShippingAddress();
+          buyerLayoutStore.getBuyerOrder();
+          buyerLayoutStore.getFavorList();
+          buyerLayoutStore.getAllCar();
+        } else if (res.data.role === "seller") {
+          sellerLayoutStore.getSellerOrder();
+          sellerLayoutStore.getStoreInfo();
+          buyerLayoutStore.getArea();
+        }
       }
     };
     /* 退出登录 */

@@ -1,23 +1,11 @@
 /*
  * @Date: 2023-12-13 15:40:01
- * @LastEditTime: 2024-02-28 15:54:19
+ * @LastEditTime: 2024-03-11 10:52:53
  * @FilePath: \car-mall-system\server\db\seller-sql.js
  * @Description:
  */
 const moment = require("moment");
-const { priceFormat } = require("../utils.js");
-const connection = require("./connect.js");
-const myPromise = (query, params = []) => {
-  return new Promise((resolve, reject) => {
-    connection.query(query, params, (error, results) => {
-      if (error) {
-        reject(error);
-      } else {
-        resolve(results);
-      }
-    });
-  });
-};
+const { myPromise, priceFormat, carResFormat } = require("../utils.js");
 const seller = {
   async setCarImg(id, img, sellerId) {
     if (id === "-1") {
@@ -31,25 +19,7 @@ const seller = {
   async getCarDetail(serverAddress, sellerId) {
     const db = "select * from car where  sellerId = ?";
     const res = await myPromise(db, [sellerId]);
-    res.forEach((el) => {
-      let createdAt = new Date(el.createdAt);
-      let updatedAt = new Date(el.updatedAt);
-      el.createdAt = moment(createdAt).format("YYYY-MM-DD HH:mm:ss");
-      el.updatedAt = moment(updatedAt).format("YYYY-MM-DD HH:mm:ss");
-      if (!el.img) return;
-      const imgInfo = el.img.split(",");
-      el.images = [];
-      imgInfo.forEach((e) => {
-        const imgData = e.split(";");
-        el.images.push({
-          name: e.split(";")[0],
-          url: serverAddress + e.split(";")[1],
-        });
-      });
-      delete el.img;
-    });
-
-    return res;
+    return carResFormat(res, serverAddress);
   },
   async getStaticCarDisposition() {
     // const brandDb = "select name from brand";
@@ -148,16 +118,112 @@ const seller = {
 
   async getStoreInfo(id) {
     const db = "select * from store where sellerId = ?";
-    return await myPromise(db, [id]);
+    const res= await myPromise(db, [id]);
+    res[0].province=JSON.parse(res[0].province)
+    return res
+  },
+  async editStoreInfo(data) {
+    const {sellerId,desc,name,province,detailAddress,phone}=data
+    const db = "update store set `desc` = ? , name = ? , province = ? , detailAddress = ? , phone = ? where sellerId = ?";
+    return await myPromise(db, [desc,name,JSON.stringify(province),detailAddress,phone,sellerId]);
   },
 
-  async editStoreName(id, name) {
-    const db = "update store set name = ? where sellerId = ?";
-    return await myPromise(db, [name, id]);
+  async getOrderList(sellerId, serverAddress) {
+    const sellerCarIdDb = "select id from car where sellerId = ?";
+    const sellerCarIdsRes = await myPromise(sellerCarIdDb, [sellerId]);
+    const sellerCarIds = sellerCarIdsRes.map((e) => e.id);
+    const orderDb = "select * from `order` where carId in (?)";
+    const orderRes = await myPromise(orderDb, [sellerCarIds]);
+    if (orderRes.length > 0) {
+      return Promise.all(
+        orderRes.map(async (order) => {
+          const buyerInfo = "select * from users where id = ?";
+          const buyerInfoRes = await myPromise(buyerInfo, [order.buyerId]);
+          const carInfo = "select * from car where id = ?";
+          const carInfoRes = await myPromise(carInfo, [order.carId]);
+          const carInfos = carResFormat(carInfoRes, serverAddress);
+          const shippingAddressDb =
+            "select * from buyer_shipping_address where id = ?";
+          const shippingAddressRes = await myPromise(shippingAddressDb, [
+            order.buyerShippingAddressId,
+          ]);
+
+          return {
+            ...order,
+            // id: order.id,
+            buyerInfo: buyerInfoRes[0],
+            carInfo: carInfos[0],
+            // count: order.count,
+            totalPrice: parseInt(order.count) * parseInt(order.price),
+            shippingAddress: shippingAddressRes[0],
+            createdAt: moment(order.createdAt).format("YYYY-MM-DD HH:mm:ss"),
+            // appointmentTime: order.appointmentTime,
+            // confirmReciept: order.confirmReciept,
+          };
+        })
+      );
+    } else {
+      return [];
+    }
   },
-  async editStoreDesc(id, desc) {
-    const db = "update store set desc = ? where sellerId = ?";
-    return await myPromise(db, [desc, id]);
+  async getAfterSale(sellerId, serverAddress) {
+    const afterSaledb =
+      "select * from after_sale where sellerId = ? and afterSaleType != 0";
+    const afterSaleRes = await myPromise(afterSaledb, [sellerId]);
+    return Promise.all(
+      afterSaleRes.map(async (afterSale) => {
+        const orderInfoDb = "select * from `order` where id = ?";
+        const orderInfoRes = await myPromise(orderInfoDb, [afterSale.orderId]);
+
+        const buyerInfoDb = "select * from buyer_shipping_address where id = ?";
+        const buyerInfoRes = await myPromise(buyerInfoDb, [
+          orderInfoRes[0].buyerShippingAddressId,
+        ]);
+        const carInfoDb = "select * from car where id = ?";
+        const carInfoRes = await myPromise(carInfoDb, [afterSale.carId]);
+        const carInfo = carResFormat(carInfoRes, serverAddress);
+        return {
+          orderInfo: orderInfoRes[0],
+          buyerInfo: buyerInfoRes[0],
+          carInfo: carInfo[0],
+          ...afterSale,
+          createdAt: moment(afterSale.createdAt).format("YYYY-MM-DD HH:mm:ss"),
+        };
+      })
+    );
   },
+  async getToDoList(sellerId, serverAddress) {
+    const afterSaledb =
+      "select * from after_sale where sellerId = ? and afterSaleType != 0 and isProcessed = 0";
+    const afterSaleRes = await myPromise(afterSaledb, [sellerId]);
+    return Promise.all(
+      afterSaleRes.map(async (afterSale) => {
+        const orderInfoDb = "select * from `order` where id = ?";
+        const orderInfoRes = await myPromise(orderInfoDb, [afterSale.orderId]);
+
+        const buyerInfoDb = "select * from buyer_shipping_address where id = ?";
+        const buyerInfoRes = await myPromise(buyerInfoDb, [
+          orderInfoRes[0].buyerShippingAddressId,
+        ]);
+        const carInfoDb = "select * from car where id = ?";
+        const carInfoRes = await myPromise(carInfoDb, [afterSale.carId]);
+        const carInfo = carResFormat(carInfoRes, serverAddress);
+        return {
+          orderInfo: orderInfoRes[0],
+          buyerInfo: buyerInfoRes[0],
+          carInfo: carInfo[0],
+          ...afterSale,
+          createdAt: moment(afterSale.createdAt).format("YYYY-MM-DD HH:mm:ss"),
+        };
+      })
+    );
+  },
+  async dealAfterSale(data){
+    const {id,sellerDesc,isProcessed,isSuccess,orderId}=data
+    const db='update after_sale set isProcessed = ? , sellerDesc = ?,isSuccess= ? where id = ?'
+    const orderDb='update `order` set isProcessed = ?,isSuccess = ? where id = ?'
+    const orderRes=await myPromise(orderDb,[parseInt(isProcessed),isSuccess,orderId])
+    return await myPromise(db,[parseInt(isProcessed),sellerDesc,isSuccess,id])
+  }
 };
 exports = module.exports = seller;

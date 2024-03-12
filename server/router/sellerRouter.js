@@ -1,6 +1,6 @@
 /*
  * @Date: 2024-02-22 15:48:05
- * @LastEditTime: 2024-02-28 16:04:44
+ * @LastEditTime: 2024-03-11 10:48:11
  * @FilePath: \car-mall-system\server\router\sellerRouter.js
  * @Description:
  */
@@ -312,7 +312,7 @@ sellerRouter.get("/car/intakeForm/:sellerId", async (req, res, next) => {
     });
   }
 });
-
+/* 获取店铺信息 */
 sellerRouter.get("/store/:id", async (req, res, next) => {
   const result = await sellerSql.getStoreInfo(req.params.id);
   if (result.length > 0) {
@@ -329,35 +329,98 @@ sellerRouter.get("/store/:id", async (req, res, next) => {
   }
 });
 
-sellerRouter.post("/store/editName", async (req, res, next) => {
-  const result = await sellerSql.editStoreName(req.body.id, req.body.name);
-  if (result.affectedRows === 1) {
-    res.send({
-      code: 0,
-      // data: result[0],
-      // msg: "获取店铺信息成功",
-    });
-  } else {
-    res.send({
-      code: -1,
-      // msg: "获取店铺信息失败",
-    });
-  }
-});
+/* 修改店铺信息 */
+sellerRouter.post("/store/edit", async (req, res, next) => {
+const result=await sellerSql.editStoreInfo(req.body)
+if(result.affectedRows===1){
+  res.send({
+    code: 0,
+    msg: "修改数据成功",
+  });
+}else{
+  res.send({
+    code: -1,
+    msg: "修改数据失败",
+  });
+}
+})
 
-sellerRouter.post("/store/editDesc", async (req, res, next) => {
-  const result = await sellerSql.editStoreDesc(req.body.id, req.body.desc);
-  if (result.affectedRows === 1) {
+/* 获取订单列表 */
+sellerRouter.get("/order/:sellerId", async (req, res, next) => {
+  const serverAddress = `${req.protocol}://${req.get("host")}`;
+  const result = await sellerSql.getOrderList(
+    req.params.sellerId,
+    serverAddress
+  );
+  if (result.length > 0) {
     res.send({
       code: 0,
-      // data: result[0],
-      // msg: "获取店铺信息成功",
+      data: result,
+      msg: "获取订单数据成功",
     });
   } else {
     res.send({
       code: -1,
-      // msg: "获取店铺信息失败",
+      data: [],
+      msg: "获取订单数据失败",
     });
   }
 });
+/* 获取售后列表 */
+sellerRouter.get("/afterSale/:sellerId", async (req, res, next) => {
+  const serverAddress = `${req.protocol}://${req.get("host")}`;
+  const result = await sellerSql.getAfterSale(
+    req.params.sellerId,
+    serverAddress
+  );
+  if (result.length > 0) {
+    res.send({
+      code: 0,
+      data: result,
+      msg: "获取退款售后成功",
+    });
+  } else {
+    res.send({
+      code: -1,
+      data: [],
+      msg: "获取退款售后失败",
+    });
+  }
+});
+/* 获取待办售后列表 */
+sellerRouter.get("/afterSale/toDo/:sellerId", async (req, res, next) => {
+  const serverAddress = `${req.protocol}://${req.get("host")}`;
+  const result = await sellerSql.getToDoList(
+    req.params.sellerId,
+    serverAddress
+  );
+  if (result.length > 0) {
+    res.send({
+      code: 0,
+      data: result,
+      msg: "获取待办列表成功",
+    });
+  } else {
+    res.send({
+      code: -1,
+      data: [],
+      msg: "获取待办列表失败",
+    });
+  }
+});
+/* 商家处理售后与退款 */
+sellerRouter.post("/afterSale/deal", async (req, res, next) => {
+const result=await sellerSql.dealAfterSale(req.body)
+if(result.affectedRows===1){
+  res.send({
+    code: 0,
+    msg: "操作退款售后成功",
+  });
+}else{
+  res.send({
+    code: -1,
+    msg: "操作退款售后失败",
+  });
+}
+})
 module.exports = sellerRouter;

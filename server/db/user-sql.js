@@ -4,6 +4,7 @@
  * @FilePath: \car-mall-system\server\db\user-sql.js
  * @Description:
  */
+const { myPromise } = require("../utils.js");
 const connection = require("./connect.js");
 function generateFourDigitNumber() {
   var randomNumber = Math.floor(Math.random() * 9000) + 1000;

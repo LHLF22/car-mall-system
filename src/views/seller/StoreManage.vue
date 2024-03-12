@@ -1,6 +1,6 @@
 <!--
  * @Date: 2024-02-20 17:21:38
- * @LastEditTime: 2024-02-28 14:35:46
+ * @LastEditTime: 2024-03-11 11:07:05
  * @FilePath: \car-mall-system\src\views\seller\StoreManage.vue
  * @Description: 
 -->
@@ -13,14 +13,14 @@
         </div>
       </template>
       <el-form
-        :model="storeForm"
+        :model="sellerLayoutStore.storeInfo"
         label-position="right"
         label-width="100px"
         style="max-width: 460px"
       >
         <el-form-item label="店铺名称：">
           <el-input
-            v-model="storeForm.name"
+            v-model="sellerLayoutStore.storeInfo.name"
             @change="infoChange('name', $event)"
           />
         </el-form-item>
@@ -28,8 +28,32 @@
           <el-input
             :rows="2"
             type="textarea"
-            v-model="storeForm.desc"
+            v-model="sellerLayoutStore.storeInfo.desc"
             @change="infoChange('desc', $event)"
+          />
+        </el-form-item>
+        <el-form-item label="店铺位于：">
+          <el-cascader
+            :options="buyerLayoutStore.areaData"
+            clearable
+            v-model="sellerLayoutStore.storeInfo.province"
+            @change="infoChange('province', $event)"
+          />
+        </el-form-item>
+        <el-form-item label="店铺详细地址：">
+          <el-input
+            :rows="2"
+            type="textarea"
+            v-model="sellerLayoutStore.storeInfo.detailAddress"
+            @change="infoChange('detailAddress', $event)"
+          />
+        </el-form-item>
+        <el-form-item label="店铺联系方式：">
+          <el-input
+            :rows="2"
+            type="textarea"
+            v-model="sellerLayoutStore.storeInfo.phone"
+            @change="infoChange('phone', $event)"
           />
         </el-form-item>
       </el-form>
@@ -43,59 +67,36 @@ import { ref, reactive, onMounted } from "vue";
 import avatar from "@/base-ui/avatar.vue";
 import useLoginStore from "@/store/login";
 import { getCurrentInstance, ComponentInternalInstance } from "vue";
-import { storeToRefs } from "pinia";
+import useSellerLayoutStore from "@/store/seller-layout.ts";
+import useBuyerLayoutStore from "@/store/buyer-layout.ts";
 const { proxy }: ComponentInternalInstance = getCurrentInstance();
-const loginStore = useLoginStore();
-const { userInfo } = storeToRefs(loginStore);
-const storeForm = ref({
-  name: "",
-  desc: "",
-});
-const storeInfo = ref({
-  id: "",
-  name: "",
-  desc: "",
-  sellerId:''
-});
-onMounted(() => {
-  init();
-});
-const init = () => {
-  //获取店铺的信息
-  proxy.$sellerApi.store.getStoreInfo({ id: userInfo.value.id }).then((res) => {
+const sellerLayoutStore = useSellerLayoutStore();
+const buyerLayoutStore = useBuyerLayoutStore();
+sellerLayoutStore.getStoreInfo();
+buyerLayoutStore.getArea();
+
+const infoChange = async (item, data) => {
+  let params = {};
+  if (item === "name") {
+    params = { ...sellerLayoutStore.storeInfo, name: data };
+  } else if (item === "desc") {
+    params = { ...sellerLayoutStore.storeInfo, desc: data };
+  } else if (item === "province") {
+    params = { ...sellerLayoutStore.storeInfo, province: data };
+  } else if (item === "detailAddress") {
+    params = { ...sellerLayoutStore.storeInfo, detailAddress: data };
+  } else if (item === "phone") {
+    params = { ...sellerLayoutStore.storeInfo, phone: data };
+  }
+  proxy.$sellerApi.store.editStoreInfo(params).then((res) => {
     if (res.code == 0) {
-      storeInfo.value = res.data;
-      storeForm.value = res.data;
+      ElMessage.success("修改数据成功");
+      sellerLayoutStore.getStoreInfo();
     } else {
-      console.log("获取店铺信息失败");
+      ElMessage.success("修改数据失败");
+      sellerLayoutStore.getStoreInfo();
     }
   });
-};
-const infoChange = async (item, data) => {
-  console.log(item, data, "data");
-  if (item === "name") {
-    const res = await proxy.$sellerApi.store.editStoreName({
-      name: data,
-      id: storeInfo.value.sellerId,
-    });
-    if (res.code === 0) {
-      storeInfo.value = { ...storeInfo.value, name: res.data.account };
-      ElMessage.success(res.msg);
-    } else {
-      ElMessage.error(res.msg);
-    }
-  } else if (item === "desc") {
-    const res = await proxy.$sellerApi.store.editStoreDesc({
-      desc: data,
-      id: storeInfo.value.sellerId,
-    });
-    if (res.code === 0) {
-      storeInfo.value = { ...storeInfo.value, desc: res.data.desc };
-      ElMessage.success(res.msg);
-    } else {
-      ElMessage.error(res.msg);
-    }
-  }
 };
 </script>
 

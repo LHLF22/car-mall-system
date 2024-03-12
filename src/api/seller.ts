@@ -1,20 +1,20 @@
 /*
  * @Date: 2023-12-08 09:19:41
- * @LastEditTime: 2024-02-28 11:41:57
+ * @LastEditTime: 2024-03-11 11:28:51
  * @FilePath: \car-mall-system\src\api\seller.ts
  * @Description:用户的api
  */
 import http from "../utils/request-utils";
 import { seller } from "../interface/seller";
 const sellerId = JSON.parse(localStorage.getItem("userInfo")).id;
-
+// const sellerId = 12
 namespace sellerApi {
   export namespace shop {
     export const setImg = (data: seller.shop.uploadImgType) => {
       return http.post(`/seller/upload/${data.id}/${sellerId}`, data.formData);
     };
-    export const getAllCarDeail = () => {
-      return http.get(`/seller/carDetail/${sellerId}`);
+    export const getAllCarDeail = (data=sellerId) => {
+      return http.get(`/seller/carDetail/${data}`);
     };
 
     export const editCarProduct = (data: any) => {
@@ -57,15 +57,27 @@ namespace sellerApi {
   }
   export namespace store {
     /* id为商家id */
-    export const getStoreInfo = (data: { id: string }) => {
-      return http.get(`/seller/store/${data.id}`);
+    export const getStoreInfo = (data=sellerId) => {
+      return http.get(`/seller/store/${data}`);
     };
-    export const editStoreName = (data: any) => {
-      return http.post(`/seller/store/editName`, data);
+    export const editStoreInfo=(data)=>{
+      return http.post(`/seller/store/edit`, data);
+    }
+  }
+  export namespace order {
+    export const getOderList= () => {
+      return http.get(`/seller/order/${sellerId}`);
     };
-    export const editStoreDesc = (data: any) => {
-      return http.post(`/seller/store/editDesc`, data);
+    export const getAfterSale= () => {
+      return http.get(`/seller/afterSale/${sellerId}`);
     };
+    export const getToDoList=()=>{
+      return http.get(`/seller/afterSale/toDo/${sellerId}`);
+    }
+    /* 商家处理用户的退款与售后 */
+    export const dealAfterSale=(data)=>{
+      return http.post(`/seller/afterSale/deal`,data);
+    }
   }
 }
 export default sellerApi;

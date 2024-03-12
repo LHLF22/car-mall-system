@@ -1,6 +1,6 @@
 <!--
  * @Date: 2023-12-27 17:40:46
- * @LastEditTime: 2024-02-28 17:22:25
+ * @LastEditTime: 2024-02-28 17:32:11
  * @FilePath: \car-mall-system\src\components\buyer\layout\layout-aside.vue
  * @Description: 买家平台的layout布局中的侧栏内容
 -->
@@ -73,9 +73,8 @@
           v-for="item in buyerLayoutStore.carTypeData"
           :key="item.type.id"
         >
-           <buttonHighlight :button-name="item.type.tag"><el-icon><component :is="item.type.icon"></component></el-icon
-          ></buttonHighlight>
-         
+         <el-button text class="m10"><el-icon><component :is="item.type.icon"></component></el-icon
+          ></el-button>
         </el-tooltip>
       </div>
     </transition>

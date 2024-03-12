@@ -1,6 +1,6 @@
 /*
  * @Date: 2023-12-05 17:17:03
- * @LastEditTime: 2024-01-04 14:32:16
+ * @LastEditTime: 2024-03-04 17:41:37
  * @FilePath: \car-mall-system\src\utils\request-utils.ts
  * @Description:
  */
@@ -63,6 +63,11 @@ http.interceptors.response.use(
       router.push("/login");
       ElMessage.error("登录超时，请重新登录！");
     }
+    // else if(err.code==='ERR_NETWORK'){
+    //   console.log('yyyyy')
+    //   ElMessage.error(err.message);
+      
+    // }
   }
 );
 
